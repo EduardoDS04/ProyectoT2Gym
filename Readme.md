@@ -110,3 +110,35 @@ CREATE TABLE ClientePlan(
 );
 ```
 
+Creamos la carpeta **views** y dentro tenemos las siguientes carpetas con sus ficheros pug, que serán las vistas:
+
+**CLIENTE**
+- _add.pug_
+- _delete.pug_
+- _edit.pug_
+- _lista.pug_
+
+**ENTRENADOR**
+- _add.pug_
+- _delete.pug_
+- _edit.pug_
+- _lista.pug_
+
+**PLAN_MEMBRESIA**
+- _add.pug_
+- _delete.pug_
+- _edit.pug_
+- _lista.pug_
+
+
+## CRUD Cliente
+
+| Verbo | Ruta | Acción |
+|:-------:|:-------:|:------:|
+| **GET**   | _/Cliente_ | Listar todos los usuarios |
+| **GET** | _/Cliente/add_ | Muestra el formulario para añadir un nuevo cliente |
+| **POST** | _/Cliente/add_ | Añade un nuevo cliente a la base de datos |
+| **GET** | _/Cliente/edit/:id_ | Muestra el formulario para editar el cliente con su id |
+|**POST** | _/Cliente/edit/:id_ | Guarda la información modificada a la base de datos |
+|**GET** | _/Cliente/delete/:id_ | Muestra el formulario para borrar un cliente |
+|**POST**| _/Cliente/delete/:id_ | Elimina el cliente de la base de datos.
