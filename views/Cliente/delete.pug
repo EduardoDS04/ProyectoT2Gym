@@ -1,0 +1,17 @@
+h3 Borrar un cliente
+        div 
+            form(method="post") 
+                label(for="nombre") Nombre:
+                input(type="text", name="nombre", value=`${Cliente.Nombre}`,disabled)
+                br
+                label(for="email") Correo:
+                input(type="email", name="email", value=`${Cliente.Correo}`,disabled)
+                br
+                label(for="fecha_registro") Fecha Registro:
+                input(type="date", name="date", value=`${Cliente.Fecha_Registro}`,disabled)
+                br
+                 label(for="telefono") Telefono:
+                input(type="number", name="number", value=`${Cliente.Telefono}`,disabled)
+                br
+                input(type="hidden", name="id", value=`${Cliente.id}`)
+                input(type="submit", value="Enviar")

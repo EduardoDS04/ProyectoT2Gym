@@ -1,0 +1,28 @@
+div 
+    h3 Listado de entrenadores
+    table(border=1)
+        thead 
+            tr
+                th id
+                th Nombre 
+                th Especialidad
+                th Nivel Experiencia
+                th Editar
+                th Borrar
+        tbody 
+            each entrenador in Entrenador
+                tr 
+                    td=entrenador.id
+                    td=entrenador.Nombre                        
+                    td=entrenador.Correo
+                    td=entrenador.Fecha_Registro 
+                    td=entrenador.Telefono
+                    td 
+                        a(href=`/Entrenador/edit/${entrenador.id}`) Editar 
+                    td 
+                        a(href=`/Entrenador/delete/${entrenador.id}`) Borrar 
+    p 
+        a(href="/Entrenador/add") Añadir un nuevo entrenador
+
+
+
