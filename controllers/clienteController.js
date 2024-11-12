@@ -123,3 +123,109 @@ exports.clienteEdit = (req, res) => {
     );
   }
 };
+
+
+// Maestro-Detalle ClientePlan
+// Listar clientes asociados a un plan específico
+exports.listaClientesPlan = (req, res) => {
+  const { idPlan } = req.query;
+  if (req.session.user) {
+    db.query(
+      'SELECT c.*, cp.Fecha_Inicio FROM Cliente c INNER JOIN ClientePlan cp ON c.id = cp.Cliente_id WHERE cp.Plan_Membresia = ?',
+      [idPlan],
+      (err, response) => {
+        if (err) res.send('ERROR al hacer la consulta');
+        else res.render('ClientePlan/lista', { clientes: response, idPlan, user: req.session.user });
+      }
+    );
+  } else {
+    res.redirect('/auth/login');
+  }
+};
+
+// Asignar un nuevo cliente a un plan
+exports.asignarClientePlan = (req, res) => {
+  const { idPlan } = req.params;
+  const { clienteId, fechaInicio } = req.body;
+  if (req.session.user) {
+    db.query(
+      'INSERT INTO ClientePlan (Cliente_id, Plan_Membresia, Fecha_Inicio) VALUES (?, ?, ?)',
+      [clienteId, idPlan, fechaInicio],
+      (err) => {
+        if (err) res.send('ERROR al asignar cliente');
+        else res.redirect(`/ClientePlan?plan=${idPlan}`);
+      }
+    );
+  } else {
+    res.redirect('/auth/login');
+  }
+};
+
+// Eliminar un cliente de un plan
+exports.eliminarClientePlan = (req, res) => {
+  const { idPlan, clienteId } = req.params;
+  if (req.session.user) {
+    db.query(
+      'DELETE FROM ClientePlan WHERE Cliente_id = ? AND Plan_Membresia = ?',
+      [clienteId, idPlan],
+      (err) => {
+        if (err) res.send('ERROR al dar de baja al cliente');
+        else res.redirect(`/ClientePlan?plan=${idPlan}`);
+      }
+    );
+  } else {
+    res.redirect('/auth/login');
+  }
+};
+//Meestro detalle de Plan Membresia
+// Listar los clientes asociados a un plan específico
+exports.listaClientesPlan = (req, res) => {
+  const { idPlan } = req.query;
+  if (req.session.user) {
+    db.query(
+      'SELECT c.*, cp.Fecha_Inicio FROM Cliente c INNER JOIN ClientePlan cp ON c.id = cp.Cliente_id WHERE cp.Plan_Membresia = ?',
+      [idPlan],
+      (err, response) => {
+        if (err) res.send('ERROR al obtener los clientes del plan');
+        else res.render('ClientePlan/lista', { clientes: response, idPlan, user: req.session.user });
+      }
+    );
+  } else {
+    res.redirect('/auth/login');
+  }
+};
+
+// Asignar un cliente a un plan
+exports.asignarClientePlan = (req, res) => {
+  const { idPlan } = req.params;
+  const { clienteId, fechaInicio } = req.body;
+  if (req.session.user) {
+    db.query(
+      'INSERT INTO ClientePlan (Cliente_id, Plan_Membresia, Fecha_Inicio) VALUES (?, ?, ?)',
+      [clienteId, idPlan, fechaInicio],
+      (err) => {
+        if (err) res.send('ERROR al asignar cliente al plan');
+        else res.redirect(`/ClientePlan?plan=${idPlan}`);
+      }
+    );
+  } else {
+    res.redirect('/auth/login');
+  }
+};
+
+// Eliminar un cliente de un plan
+exports.eliminarClientePlan = (req, res) => {
+  const { idPlan, clienteId } = req.params;
+  if (req.session.user) {
+    db.query(
+      'DELETE FROM ClientePlan WHERE Cliente_id = ? AND Plan_Membresia = ?',
+      [clienteId, idPlan],
+      (err) => {
+        if (err) res.send('ERROR al eliminar cliente del plan');
+        else res.redirect(`/ClientePlan?plan=${idPlan}`);
+      }
+    );
+  } else {
+    res.redirect('/auth/login');
+  }
+};
