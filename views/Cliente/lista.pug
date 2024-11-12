@@ -1,26 +1,30 @@
-div 
-    h3 Listado de clientes
-    table(border=1)
-        thead 
-            tr
-                th id
-                th Nombre 
-                th Correo
-                th Fecha Registro 
-                th Telefono
-                th Editar
-                th Borrar
-        tbody 
-            each cliente in Cliente
-                tr 
-                    td=cliente.id
-                    td=cliente.Nombre                        
-                    td=cliente.Correo
-                    td=cliente.Fecha_Registro 
-                    td=cliente.Telefono
-                    td 
-                        a(href=`/Cliente/edit/${cliente.id}`) Editar 
-                    td 
-                        a(href=`/Cliente/delete/${cliente.id}`) Borrar 
-    p 
-        a(href="/Cliente/add") Añadir un nuevo cliente
+extends ../templates/layout
+
+block content  
+    div 
+        h3 Listado de clientes
+        table(border=1)
+            thead 
+                tr
+                    th id
+                    th Nombre 
+                    th Correo
+                    th Fecha Registro 
+                    th Telefono
+                    th Editar
+                    th Borrar
+            tbody 
+                each cliente in Cliente
+                    tr 
+                        td=cliente.id
+                        td=cliente.Nombre                        
+                        td=cliente.Correo
+                        td=cliente.Fecha_Registro 
+                        td=cliente.Telefono
+                        td 
+                            a(href=`/Cliente/edit/${cliente.id}`) Editar 
+                        td 
+                            a(href=`/Cliente/delete/${cliente.id}`) Borrar 
+        p 
+            a(href="/Cliente/add") Añadir un nuevo cliente
+    
