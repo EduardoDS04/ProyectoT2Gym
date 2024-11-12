@@ -2,18 +2,18 @@ version: '3.1'
 
 services:
 
-  adminer:
-    image: adminer
-    restart: "no"
-    ports:
-      - ${ADMINER_PORT}:8080
-
   db-gimnasio:
     image: mysql:latest
+    command: --mysql-native-password=ON
     restart: "no"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: zx76wbz7FG89k
     ports:
-      - ${MYSQL_PORT}:3306
-    volumes:
-      - ./scripts:/docker-entrypoint-initdb.d
+      - 33307:3306
+
+  adminer:
+    image: adminer:latest
+    restart: "no"
+    ports:
+      - 8182:8080
+
