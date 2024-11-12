@@ -9,9 +9,9 @@ router.get('/add', clienteController.clienteAddFormulario);
 
 router.post('/add', clienteController.clienteAdd);
 
-router.get('/del/:id', clienteController.clienteDelFormulario);
+router.get('/delete/:id', clienteController.clienteDelFormulario);
 
-router.post('/del/:id', clienteController.clienteDel);
+router.post('/delete/:id', clienteController.clienteDel);
 
 router.get('/edit/:id', clienteController.clienteEditFormulario);
 

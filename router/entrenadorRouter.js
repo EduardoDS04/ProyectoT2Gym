@@ -9,9 +9,9 @@ router.get('/add', entrenadorController.entrenadorAddFormulario);
 
 router.post('/add', entrenadorController.entrenadorAdd);
 
-router.get('/del/:id', entrenadorController.entrenadorDelFormulario);
+router.get('/delete/:id', entrenadorController.entrenadorDelFormulario);
 
-router.post('/del/:id', entrenadorController.entrenadorDel);
+router.post('/delete/:id', entrenadorController.entrenadorDel);
 
 router.get('/edit/:id', entrenadorController.entrenadorEditFormulario);
 
