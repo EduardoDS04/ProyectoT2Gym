@@ -1,0 +1,17 @@
+h3 Borrar un plan
+        div 
+            form(method="post") 
+                label(for="nombre") Nombre:
+                input(type="text", name="nombre", value=`${Plan_Membresia.Nombre_Plan}`,disabled)
+                br
+                label(for="duracion") Duración en meses:
+                input(type="number", name="number", value=`${Plan_Membresia.Duracion_Meses}`,disabled)
+                br
+                label(for="costo") Costo:
+                input(type="number", name="number", value=`${Plan_Membresia.Costo}`,disabled)
+                br
+                input(type="hidden", name="id", value=`${Plan_Membresia.id}`)
+                input(type="submit", value="Enviar")
+
+
+
