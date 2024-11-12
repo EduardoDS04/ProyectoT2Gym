@@ -1,0 +1,16 @@
+extends templates/layout
+
+block content
+    .container 
+        h1 Alta en el sistema
+
+        form.row.g-3(action="/auth/register", method="post") 
+            
+            .col-md-6
+                label.form-label(for="username") Usuario
+                input.form-control(type="text", name="username", id="username", required)
+                label.form-label(for="password") Contraseña
+                input.form-control(type="password", name="password" id="password", required)
+                br            
+            .col-12
+            button.btn.btn-success(type="submit") Sign up!
