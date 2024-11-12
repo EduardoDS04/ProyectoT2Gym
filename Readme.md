@@ -17,7 +17,7 @@ package-lock.json
 .env
 ``` 
 
-Y hacemos un _git init_.
+Y hacemos un _git init_, que nos creará un nuevo repositorio git.
 
 Hemos creado una carpeta llamada *stack_gym* que contiene el **docker-compose.yml**, el **.env** y una carpeta **script** con un fichero **initdb.sql** que contendrá las tablas.
 
@@ -131,14 +131,28 @@ Creamos la carpeta **views** y dentro tenemos las siguientes carpetas con sus fi
 - _lista.pug_
 
 
-## CRUD Cliente
+
+### CRUD Cliente
 
 | Verbo | Ruta | Acción |
 |:-------:|:-------:|:------:|
-| **GET**   | _/Cliente_ | Listar todos los usuarios |
+| **GET**   | _/Cliente_ | Listar todos los clientes |
 | **GET** | _/Cliente/add_ | Muestra el formulario para añadir un nuevo cliente |
 | **POST** | _/Cliente/add_ | Añade un nuevo cliente a la base de datos |
 | **GET** | _/Cliente/edit/:id_ | Muestra el formulario para editar el cliente con su id |
 |**POST** | _/Cliente/edit/:id_ | Guarda la información modificada a la base de datos |
 |**GET** | _/Cliente/delete/:id_ | Muestra el formulario para borrar un cliente |
-|**POST**| _/Cliente/delete/:id_ | Elimina el cliente de la base de datos.
+|**POST**| _/Cliente/delete/:id_ | Elimina el cliente de la base de datos.|9
+
+
+### CRUD ENTRENADOR
+| Verbo | Ruta | Acción |
+|:-----:|:----:|:------:|
+| **GET** | _/Entrenador_ | Listar a todos los entrenadores| 
+| **GET** | _/Entrenador/add_ | Muestra el formulario para añadir un entrenador|
+| **POST** | _/Entrenador/add_ | Se añade un nuevo entrenador a la base de datos|
+| **GET** | _Entrenador/edit/:id_ | Muestra el formulario para editar el cliente con su id |
+| **POST** | _Entrenador/edit/:id_ | Guarda la información modificada en la base de datos|
+| **GET** | _/Entrenador/delete/:id_ | Muestra el formulario para borrar el entrenador |
+| **POST** | _/Entrenador/delete/:id_ | Eliminar al entrenador de la base de datos.|
+
