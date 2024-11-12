@@ -35,42 +35,49 @@ CREATE TABLE Plan_Membresia(
 );
 
 -- Tabla para Sesion
-CREATE TABLE Sesion(
+CREATE TABLE Sesion (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    Hora  TIME,
+    id_Cliente INT,
+    id_Entrenador INT,
+    Hora TIME,
     Fecha DATE,
     Duracion_Minutos INT,
     FOREIGN KEY (id_Cliente) REFERENCES Cliente(id),
     FOREIGN KEY (id_Entrenador) REFERENCES Entrenador(id)
 );
 
---Tabla para ClientePlan
-CREATE TABLE ClientePlan(
+
+-- Tabla para ClientePlan
+CREATE TABLE ClientePlan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_Cliente INT,
+    id_Plan INT,
+    Fecha_Inicio DATE,
     FOREIGN KEY (id_Cliente) REFERENCES Cliente(id),
-    FOREIGN KEY (id_Plan) REFERENCES Plan_Membresia(id),
-    Fecha_Inicio DATE
+    FOREIGN KEY (id_Plan) REFERENCES Plan_Membresia(id)
 );
 
 
 
---para que los acentos salgan bien
-SET NAME utf8mb4;
+
+-- para que los acentos salgan bien
+SET NAMES utf8mb4;
 
 
 
 -- Insertar datos en Cliente
-INSERT INTO `Cliente` (`id`,`Nombre`, `Correo`, `Fecha_Registro`, `Telefono`)
-  VALUES
-    (1, 'Luis', 'cliente1@gymcorreo.com', 'cliente1@gymcorreo.com', '555-6983'),
-    (2, 'Sofia', 'cliente2@gymcorreo.com', '3/23/2016', '555-6896'),
-    (3, 'Ana', 'cliente3@gymcorreo.com', '2/2/2016', '555-6864'),
-    (4, 'Ana', 'cliente4@gymcorreo.com', '2/15/2008', '555-4611'),
-    (5, 'Sofia', 'cliente5@gymcorreo.com', '1/7/2010', '555-1593'),
-    (6, 'Luis', 'cliente6@gymcorreo.com', '5/28/2013', '555-1116'),
-    (7, 'Sofia', 'cliente7@gymcorreo.com', '5/4/2008', '555-2996'),
-    (8, 'José', 'cliente8@gymcorreo.com', '6/26/1992', '555-9572'),
-    (9, 'Lucía', 'cliente9@gymcorreo.com', '9/6/2019', '555-3335'),
-    (10, 'María', 'cliente10@gymcorreo.com', '9/22/1990', '555-7920');
+INSERT INTO Cliente (id, Nombre, Correo, Fecha_Registro, Telefono)
+VALUES
+    (1, 'Luis', 'cliente1@gymcorreo.com', '2016-03-23', '555-6983'),
+    (2, 'Sofia', 'cliente2@gymcorreo.com', '2016-03-23', '555-6896'),
+    (3, 'Ana', 'cliente3@gymcorreo.com', '2016-02-02', '555-6864'),
+    (4, 'Ana', 'cliente4@gymcorreo.com', '2008-02-15', '555-4611'),
+    (5, 'Sofia', 'cliente5@gymcorreo.com', '2010-01-07', '555-1593'),
+    (6, 'Luis', 'cliente6@gymcorreo.com', '2013-05-28', '555-1116'),
+    (7, 'Sofia', 'cliente7@gymcorreo.com', '2008-05-04', '555-2996'),
+    (8, 'José', 'cliente8@gymcorreo.com', '1992-06-26', '555-9572'),
+    (9, 'Lucía', 'cliente9@gymcorreo.com', '2019-09-06', '555-3335'),
+    (10, 'María', 'cliente10@gymcorreo.com', '1990-09-22', '555-7920');
 
 
 -- Insertar datos en Entrenador
@@ -93,44 +100,45 @@ INSERT INTO `Plan_Membresia`(`id`, `Nombre_Plan`, `Duracion_Meses`, `Costo`)
 
 
 -- Insertar datos en Sesion
-INSERT INTO `Sesion` (`id`, `Hora`, `Fecha`, `Duracion_Minutos`, `id_Cliente`, `id_Entrenador`)
-  VALUES 
-    (1, '12/1/2000', '05:00:00', 45, 8, 2),
-    (2, '12/14/1991', '09:00:00', 45, 4, 3),
-    (3, '5/26/2021', '10:00:00', 45, 6, 5),
-    (4, '5/5/2011', '11:00:00', 60, 9, 4),
-    (5, '9/23/2007', '09:00:00', 30, 8, 1),
-    (6, '9/29/2005', '09:00:00', 90, 6, 1),
-    (7, '8/30/2008', '03:00:00', 45, 8, 3),
-    (8, '10/2/2005', '07:00:00', 90, 9, 4),
-    (9, '4/12/2011', '11:00:00', 60, 5, 3),
-    (10, '1/9/2001', '12:00:00', 60, 5, 3),
-    (11, '3/4/1999', '08:00:00', 30, 8, 2),
-    (12, '8/5/2001', '07:00:00', 30, 8, 5),
-    (13, '12/28/1991', '03:00:00', 90, 6, 1),
-    (14, '11/6/1996', '08:00:00', 90, 9, 3),
-    (15, '3/23/2000', '04:00:00', 45, 1, 1);
+INSERT INTO Sesion (id, Fecha, Hora, Duracion_Minutos, id_Cliente, id_Entrenador)
+VALUES 
+    (1, '2000-12-01', '05:00:00', 45, 8, 2),
+    (2, '1991-12-14', '09:00:00', 45, 4, 3),
+    (3, '2021-05-26', '10:00:00', 45, 6, 5),
+    (4, '2011-05-05', '11:00:00', 60, 9, 4),
+    (5, '2007-09-23', '09:00:00', 30, 8, 1),
+    (6, '2005-09-29', '09:00:00', 90, 6, 1),
+    (7, '2008-08-30', '03:00:00', 45, 8, 3),
+    (8, '2005-10-02', '07:00:00', 90, 9, 4),
+    (9, '2011-04-12', '11:00:00', 60, 5, 3),
+    (10, '2001-01-09', '12:00:00', 60, 5, 3),
+    (11, '1999-03-04', '08:00:00', 30, 8, 2),
+    (12, '2001-08-05', '07:00:00', 30, 8, 5),
+    (13, '1991-12-28', '03:00:00', 90, 6, 1),
+    (14, '1996-11-06', '08:00:00', 90, 9, 3),
+    (15, '2000-03-23', '04:00:00', 45, 1, 1);
 
 
 
 -- Insertar datos en ClientePlan
-INSERT INTO `ClientePlan` (`id_Cliente`, `id_Plan`, `Fecha_Inicio`)
-  VALUES 
-    (3, 1, '11/8/2005'),
-    (9, 3, '7/3/1998'),
-    (2, 1, '1/26/2021'), 
-    (2, 1, '10/28/1995'),
-    (3, 3, '9/21/2003'),
-    (9, 1, '9/21/2016'),
-    (9, 1, '12/23/2020'),
-    (3, 1, '8/14/2006'),
-    (6, 1, '4/13/2016'),
-    (10, 1, '4/18/2018'),
-    (4, 1, '8/28/2021'),
-    (10, 3, '5/31/2005'),
-    (2, 2, '7/14/2005'),
-    (10, 1, '1/26/2011'),
-    (6, 1, '7/26/2017');
+INSERT INTO ClientePlan (id_Cliente, id_Plan, Fecha_Inicio)
+VALUES 
+    (3, 1, '2005-11-08'),
+    (9, 3, '1998-07-03'),
+    (2, 1, '2021-01-26'), 
+    (2, 1, '1995-10-28'),
+    (3, 3, '2003-09-21'),
+    (9, 1, '2016-09-21'),
+    (9, 1, '2020-12-23'),
+    (3, 1, '2006-08-14'),
+    (6, 1, '2016-04-13'),
+    (10, 1, '2018-04-18'),
+    (4, 1, '2021-08-28'),
+    (10, 3, '2005-05-31'),
+    (2, 2, '2005-07-14'),
+    (10, 1, '2011-01-26'),
+    (6, 1, '2017-07-26');
+
 
 
 
