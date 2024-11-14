@@ -124,3 +124,63 @@ exports.entrenadorEdit = (req, res) => {
     );
   }
 };
+
+
+
+
+//Maestro-detalle Sesion    Entrenaor-sesion
+// Listar entrenadores y sesiones asociadas (maestro-detalle)
+exports.entrenadorSesiones = (req, res) => {
+    if (req.session.user) {
+        db.query('SELECT * FROM `Entrenador`', (err, entrenadores) => {
+            if (err) {
+                res.send('ERROR al hacer la consulta de entrenadores');
+            } else {
+                // Obtenemos el id del entrenador
+                const idEntrenadorSeleccionado = req.query.entrenador 
+                    ? parseInt(req.query.entrenador) 
+                    : null;
+
+                let nombreEntrenadorSeleccionado = '';
+                let sesiones = [];
+
+                if (idEntrenadorSeleccionado) {
+                    // Buscamos el nombre del entrenador seleccionado
+                    const entrenadorSeleccionado = entrenadores.find(e => e.id === idEntrenadorSeleccionado);
+                    nombreEntrenadorSeleccionado = entrenadorSeleccionado ? entrenadorSeleccionado.nombre : '';
+
+                    // Si hay un entrenador seleccionado, obtenemos sus sesiones
+                    db.query(
+                        'SELECT * FROM `Sesion` WHERE idEntrenador = ?',
+                        [idEntrenadorSeleccionado],
+                        (err, response) => {
+                            if (err) {
+                                res.send('ERROR al hacer la consulta de sesiones');
+                            } else {
+                                sesiones = response;
+                                res.render('Entrenador/sesion', { 
+                                    entrenadores, 
+                                    sesiones, 
+                                    idEntrenadorSeleccionado, 
+                                    nombreEntrenadorSeleccionado, 
+                                    user: req.session.user 
+                                });
+                            }
+                        }
+                    );
+                } else {
+                    // Si no hay entrenador seleccionado, solo mostramos la lista de entrenadores
+                    res.render('Entrenador/sesion', { 
+                        entrenadores, 
+                        sesiones, 
+                        idEntrenadorSeleccionado: null, 
+                        nombreEntrenadorSeleccionado: '', 
+                        user: req.session.user 
+                    });
+                }
+            }
+        });
+    } else {
+        res.redirect('/auth/login');
+    }
+};
