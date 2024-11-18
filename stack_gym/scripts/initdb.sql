@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS users(
 );
 
 INSERT INTO `users` (`username`, `password`, `enabled`, `tipo`)
-  VALUES ('pepe', 'Secreto_123', 'ENTRENADOR');
+  VALUES ('pepe', 'Secreto_123', 1, 'ENTRENADOR');
 
 
 -- Tabla para ClientePlan

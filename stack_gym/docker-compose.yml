@@ -4,7 +4,6 @@ services:
 
   db-gimnasio:
     image: mysql:latest
-    command: --mysql-native-password=ON
     restart: "no"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

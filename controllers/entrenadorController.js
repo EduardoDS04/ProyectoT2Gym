@@ -27,7 +27,7 @@ exports.entrenadorAdd = (req, res) => {
   const { nombre, apellido } = req.body 
   if (req.session.user)  
     db.query(
-      'INSERT INTO Entrenador (nombre, apellido) VALUES (?,?)',  // Inserta el entrenador en la base de datos
+      'INSERT INTO Entrenador (nombre, especialidad, Nivel_Experiencia) VALUES (?,?, ?)',  // Inserta el entrenador en la base de datos
       [nombre, apellido],  
       (error, respuesta) => {
         if (error) res.send('ERROR INSERTANDO ENTRENADOR' + req.body)  
