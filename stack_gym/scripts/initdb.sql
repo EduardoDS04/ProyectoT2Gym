@@ -47,6 +47,16 @@ CREATE TABLE Sesion (
 );
 
 
+-- Tabla para ClientePlan
+CREATE TABLE ClientePlan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_Cliente INT,
+    id_Plan INT,
+    Fecha_Inicio DATE,
+    FOREIGN KEY (id_Cliente) REFERENCES Cliente(id),
+    FOREIGN KEY (id_Plan) REFERENCES Plan_Membresia(id)
+);
+
 CREATE TABLE IF NOT EXISTS users(
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
@@ -59,17 +69,6 @@ CREATE TABLE IF NOT EXISTS users(
 
 INSERT INTO `users` (`username`, `password`, `enabled`, `tipo`)
   VALUES ('pepe', 'Secreto_123', 1, 'ENTRENADOR');
-
-
--- Tabla para ClientePlan
-CREATE TABLE ClientePlan (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_Cliente INT,
-    id_Plan INT,
-    Fecha_Inicio DATE,
-    FOREIGN KEY (id_Cliente) REFERENCES Cliente(id),
-    FOREIGN KEY (id_Plan) REFERENCES Plan_Membresia(id)
-);
 
 
 
