@@ -2,17 +2,16 @@ extends ../templates/layout
 
 block content  
     h3 Borrar un entrenador
-        div 
+        div.container
             form(method="post") 
                 label(for="nombre") Nombre:
-                input(type="text", name="nombre", value=`${Entrenador.Nombre}`,disabled)
+                input.form-control(type="text", name="nombre", value=`${entrenador.Nombre}`,disabled)
                 br
                 label(for="especialidad") Especialidad:
-                input(type="text", name="text", value=`${Entrenador.Especialidad}`,disabled)
+                input.form-control(type="text", name="text", value=`${entrenador.Especialidad}`,disabled)
                 br
                 label(for="nivel_experiencia") Nivel experiencia:
-                input(type="text", name="text", value=`${Entrenador.Nivel_Experiencia}`,disabled)
+                input.form-control(type="text", name="text", value=`${entrenador.Nivel_Experiencia}`,disabled)
                 br
-                input(type="hidden", name="id", value=`${Entrenador.id}`)
-                input(type="submit", value="Enviar")
-
+                input(type="hidden", name="id", value=`${entrenador.id}`)
+                button.btn.btn-danger(type="submit") Confirmar

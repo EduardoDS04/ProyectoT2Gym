@@ -1,43 +1,30 @@
 extends ../templates/layout
 
 block content
-
-    div(class="container")
-        h3 Listado de entrenadores
-        p Seleccione un entrenador para ver sus sesiones
-
-        form(id="entrenadorForm")
-            select.form-select(name="entrenador" id="entrenador" onchange="document.getElementById('entrenadorForm').submit()")
-                each entrenador in Entrenador
-                    if entrenador.id == idEntrenadorSeleccionado
-                        option(value=`${entrenador.id}`, selected) #{entrenador.Nombre}
-                    else 
-                        option(value=`${entrenador.id}`) #{entrenador.Nombre}
-
-        br
-
-      
-        if sesiones.length
-            h3 Sesiones asignadas al entrenador: #{nombreEntrenadorSeleccionado}
-            table(class="table")
-                thead 
-                    tr
-                        th ID Sesión
-                        th Hora de Inicio
-                        th Fecha de Sesión
-                        th Duración en minutos
-                        th ID Cliente
-                tbody 
-                    each sesion in sesiones
-                        tr 
-                            td= sesion.id
-                            td= sesion.Hora
-                            td= sesion.Fecha
-                            td= sesion.Duracion_Minutos
-                            td= sesion.Cliente
-        else
-            p No hay sesiones asignadas para este entrenador.
-
-    script(src="/js/initdb.js", type="text/javascript")
-
-
+  
+  div.container.d-flex.justify-content-center.align-items-center.min-vh-100
+    div
+      h3.text-center.mb-4 Sesiones del Entrenador por ID
+      // Verificación de si hay sesiones
+      if sesiones.length
+        table.table.table-bordered.table-striped
+          thead
+            tr
+              th ID Sesión
+              th Fecha
+              th Hora
+              th Duración (min)
+              th Cliente
+          tbody
+            each sesion in sesiones
+              tr
+                td= sesion.id
+                td= sesion.Fecha
+                td= sesion.Hora
+                td= sesion.Duracion_Minutos
+                td= sesion.id_Cliente
+      else
+        p.text-center No hay sesiones asignadas para este entrenador.
+    
+      p.text-center.mt-3
+        a.btn.btn-primary(href="/Entrenador") Volver al Listado de Entrenadores

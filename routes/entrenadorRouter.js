@@ -17,4 +17,6 @@ router.get('/edit/:id', entrenadorController.entrenadorEditFormulario);
 
 router.post('/edit/:id', entrenadorController.entrenadorEdit);
 
+router.get('/:id/sesion', entrenadorController.verSesionesEntrenador);
+
 module.exports = router;
