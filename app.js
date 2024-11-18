@@ -2,43 +2,65 @@ const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
+const session = require('express-session'); // Asegúrate de incluir express-session
 
 // Configuración del archivo .env
 dotenv.config({ path: './stack_gym/.env' });
 
 // Importamos las rutas
-const authRoutes = require('./routes/authRouter');
-const clienteRoutes = require('./routes/clienteRouter');
-const entrenadorRoutes = require('./routes/entrenadorRouter');
+const authRouter = require('./routes/authRouter');
+const entrenadorRouter = require('./routes/entrenadorRouter');
+const clienteRouter = require('./routes/clienteRouter');
 
 // Inicializar la aplicación Express
 const app = express();
+const port = process.env.PORT || 3000; // Define la variable `port` correctamente
 
 // Configuración de middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Configuración de sesiones
+app.use(
+    session({
+        secret: 'misupersecretoquenadiesabe',
+        resave: true,
+        saveUninitialized: false,
+    })
+);
+
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null; // O ajusta según tu implementación
+    next();
+  });
+  
+
 // Configuración de vistas
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 
 // Rutas
-app.use('/auth', authRoutes);         // Rutas de autenticación (registro, inicio de sesión, etc.)
-app.use('/clientes', clienteRoutes);   // Rutas de clientes (CRUD de clientes)
-app.use('/entrenadores', entrenadorRoutes);  // Rutas de entrenadores (CRUD de entrenadores)
+app.use('/auth', authRouter); // Rutas de autenticación (registro, inicio de sesión, etc.)
+app.use('/Entrenador', entrenadorRouter); // Rutas de entrenadores (CRUD de entrenadores)
+app.use('/Cliente',clienteRouter);
+
+
 
 // Ruta principal
 app.get('/', (req, res) => {
-    res.send('Bienvenido al sistema de gestión de gimnasio');
+    if (req.session.user) {
+        res.render('index', { user: req.session.user, titulo: 'Inicio' });
+    } else {
+        res.redirect('/auth/login');
+    }
 });
 
 // Manejo de errores de rutas no encontradas
 app.use((req, res, next) => {
-    res.status(404).send("Página no encontrada");
+    res.status(404).send('Página no encontrada');
 });
 
-// Configuración del puerto y conexión al servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
+// Iniciar servidor
+app.listen(port, () => {
+    console.log(`Servidor iniciado en http://localhost:${port}`);
 });
