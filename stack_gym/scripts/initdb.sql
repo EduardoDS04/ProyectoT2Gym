@@ -134,7 +134,7 @@ INSERT INTO `ClientePlan` (`id_Cliente`, `id_Plan`, `Fecha_Inicio`)
 
 
 
--- Eliminar la clave foránea existente en la tabla `Sesion`
+-- Eliminar la clave foránea existente en la tabla Sesion
 ALTER TABLE Sesion DROP FOREIGN KEY Sesion_ibfk_2;
 
 -- Volver a agregar la clave foránea con la opción de eliminación en cascada

@@ -2,7 +2,7 @@ const db = require('../db')
 
 // Obtener la lista de todos los entrenadores
 exports.entrenadores = (req, res) => {
-  db.query('SELECT * FROM Entrenador', (err, results) => {  // Hacemos la consulta a la base de datos
+  db.query('SELECT * FROM Entrenador', (err, results) => {  
     if (err) {
       console.error('Error al obtener los entrenadores:', err);
       return res.render('mensaje', { 
@@ -54,7 +54,7 @@ exports.entrenadorAdd = (req, res) => {
 
 // Mostrar formulario para eliminar un entrenador
 exports.entrenadorDelFormulario = (req, res) => {
-  const { id } = req.params;  // Extrae el parámetro 'id' de la URL
+  const { id } = req.params; 
   if (isNaN(id)) {
     res.send('PARAMETROS INCORRECTOS');
   } else {
@@ -87,11 +87,11 @@ exports.entrenadorDelFormulario = (req, res) => {
 exports.entrenadorDel = (req, res) => {
   const { id } = req.params; // 
 
-  // Validamos si el id es un número
+ 
   if (isNaN(id)) {
     return res.send('ERROR BORRANDO EL ENTRENADOR: ID no válido');
   } else {
-    // Primero eliminamos las sesiones asociadas al entrenador
+    
     db.query(
       'DELETE FROM Sesion WHERE id_Entrenador = ?',  
       [id],  
@@ -101,7 +101,7 @@ exports.entrenadorDel = (req, res) => {
           return res.send('ERROR BORRANDO SESIONES: ' + errorSesion.message);
         }
 
-        // Ahora podemos proceder a eliminar el entrenador
+     
         db.query(
           'DELETE FROM Entrenador WHERE id = ?', 
           [id],  
@@ -124,21 +124,21 @@ exports.entrenadorDel = (req, res) => {
 
 // Mostrar formulario para editar un entrenador
 exports.entrenadorEditFormulario = (req, res) => {
-  const { id } = req.params;  // Extrae el parámetro 'id' de la URL
+  const { id } = req.params;  
   if (isNaN(id)) {
     res.send('PARÁMETROS INCORRECTOS');
   } else {
     if (req.session.user) {
       db.query(
         'SELECT * FROM Entrenador WHERE id=?',  
-        [id],  // Corregimos el query para usar el parámetro correctamente
+        [id],  
         (error, respuesta) => {
           if (error) {
             res.send('ERROR al INTENTAR ACTUALIZAR EL ENTRENADOR');
           } else {
             if (respuesta.length > 0) {
               res.render('Entrenador/edit', { 
-                entrenador: respuesta[0],  // Pasamos el entrenador a la vista
+                entrenador: respuesta[0],  
                 user: req.session.user 
               });
             } else {
@@ -147,7 +147,7 @@ exports.entrenadorEditFormulario = (req, res) => {
           }
         });
     } else {
-      res.redirect('/auth/login');  // Redirige si no hay sesión
+      res.redirect('/auth/login');  
     }
   }
 };
@@ -162,13 +162,13 @@ exports.entrenadorEdit = (req, res) => {
   } else {
     db.query(
       'UPDATE Entrenador SET Nombre = ?, Especialidad = ?, Nivel_Experiencia = ? WHERE id = ?',  
-      [nombre, especialidad, nivel_experiencia, id],  // Usamos las columnas correctas
+      [nombre, especialidad, nivel_experiencia, id],  
       (error, respuesta) => {
         if (error) {
-          res.send('ERROR ACTUALIZANDO ENTRENADOR: ' + error);  // Muestra el error si hay alguno
+          res.send('ERROR ACTUALIZANDO ENTRENADOR: ' + error); 
           console.log(error);
         } else {
-          res.redirect('/Entrenador');  // Redirige a la lista de entrenadores después de actualizar
+          res.redirect('/Entrenador');  
         }
       }
     );
