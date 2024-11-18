@@ -2,25 +2,16 @@ const db = require('../db')
 
 // Obtener la lista de todos los entrenadores
 exports.entrenadores = (req, res) => {
-  db.query('SELECT * FROM Entrenador', (err, results) => {  
-    if (err) {
-      console.error('Error al obtener los entrenadores:', err);
-      return res.render('mensaje', { 
-        tituloPagina: 'Error', 
-        mensajePagina: 'No se pudieron cargar los entrenadores. Detalles: ' + err.message 
-      });
-    }
-
-    // Verifica que los resultados estén bien definidos
-    if (!results || results.length === 0) {
-      return res.render('mensaje', { 
-        tituloPagina: 'Lista de Entrenadores', 
-        mensajePagina: 'No se encontraron entrenadores.' 
-      });
-    }
-
-    res.render('Entrenador/lista', { Entrenador: results });  
-  });
+  if (req.session.user)  
+    db.query(
+      'SELECT * FROM `Entrenador`',  
+      (err, response) => {
+        if (err) res.send('ERROR al hacer la consulta') 
+        else res.render('Entrenador/lista', { entrenadores: response, user: req.session.user })  
+      }
+    )
+  else 
+    res.redirect('/auth/login') 
 };
 
 
