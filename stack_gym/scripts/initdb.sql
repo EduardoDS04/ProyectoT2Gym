@@ -47,6 +47,20 @@ CREATE TABLE Sesion (
 );
 
 
+CREATE TABLE IF NOT EXISTS users(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `enabled`BOOL,
+  tipo ENUM('ENTRENADOR', 'CLIENTE', 'ADMIN'),
+  Cliente INT REFERENCES Cliente(id),
+  Entrenador INT REFERENCES Enternador(id)
+);
+
+INSERT INTO `users` (`username`, `password`, `enabled`, `tipo`)
+  VALUES ('pepe', 'Secreto_123', 'ENTRENADOR');
+
+
 -- Tabla para ClientePlan
 CREATE TABLE ClientePlan (
     id INT AUTO_INCREMENT PRIMARY KEY,

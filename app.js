@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
-const session = require('express-session'); // Asegúrate de incluir express-session
+const session = require('express-session');
 
 // Configuración del archivo .env
 dotenv.config({ path: './stack_gym/.env' });
@@ -14,7 +14,7 @@ const clienteRouter = require('./routes/clienteRouter');
 
 // Inicializar la aplicación Express
 const app = express();
-const port = process.env.PORT || 3000; // Define la variable `port` correctamente
+const port = process.env.PORT || 3000; 
 
 // Configuración de middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,7 +30,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-    res.locals.user = req.session.user || null; // O ajusta según tu implementación
+    res.locals.user = req.session.user || null; 
     next();
   });
   
@@ -40,8 +40,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // Rutas
-app.use('/auth', authRouter); // Rutas de autenticación (registro, inicio de sesión, etc.)
-app.use('/Entrenador', entrenadorRouter); // Rutas de entrenadores (CRUD de entrenadores)
+app.use('/auth', authRouter); 
+app.use('/Entrenador', entrenadorRouter); 
 app.use('/Cliente',clienteRouter);
 
 
