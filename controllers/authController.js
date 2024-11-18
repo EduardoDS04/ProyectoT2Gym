@@ -1,38 +1,55 @@
 const bcrypt = require('bcrypt');
 const db = require('../db');
 
+// Mostrar formulario de registro
 exports.registerForm = (req, res) => {
     res.render('register');
 };
 
+// Registrar un nuevo usuario
 exports.register = (req, res) => {
-    const datosUsuario = req.body;
-    datosUsuario.password = bcrypt.hashSync(datosUsuario.password, 10);
+    const { username, password, tipo } = req.body;
+    if (!username || !password) {
+        return res.render('mensaje', {
+            tituloPagina: 'Registro',
+            mensajePagina: 'El nombre de usuario y la contraseña son obligatorios.'
+        });
+    }
 
-    // Si el tipo no es proporcionado, por defecto será 'CLIENTE'
-    const tipoUsuario = datosUsuario.tipo || 'CLIENTE';
+    // Encriptar la contraseña
+    const hashedPassword = bcrypt.hashSync(password, 10);
 
-    try {
-        // Guardamos el usuario en la BBDD SIN ACTIVAR
-        db.query(
-            'INSERT INTO users (username, password, enabled, tipo) VALUES (?,?,?,?)',
-            [datosUsuario.username, datosUsuario.password, 1, tipoUsuario],
-            (error, respuesta) => {
-                if (error) {
-                    res.send('ERROR INSERTANDO usuario: ' + error);
-                } else {
-                    res.render('mensaje', {
-                        tituloPagina: 'Registro usuarios',
-                        mensajePagina: 'Usuario registrado correctamente.'
+    //(por defecto CLIENTE)
+    const tipoUsuario = ['ADMIN', 'ENTRENADOR', 'CLIENTE'].includes(tipo) ? tipo : 'CLIENTE';
+
+    // Insertar usuario en la base de datos
+    db.query(
+        'INSERT INTO users (username, password, enabled, tipo) VALUES (?, ?, ?, ?)',
+        [username, hashedPassword, 1, tipoUsuario],
+        (error) => {
+            if (error) {
+                console.error('Error al registrar el usuario:', error);
+                if (error.code === 'ER_DUP_ENTRY') {
+                    return res.render('mensaje', {
+                        tituloPagina: 'Registro',
+                        mensajePagina: 'El nombre de usuario ya está en uso.'
                     });
                 }
+                return res.render('mensaje', {
+                    tituloPagina: 'Error',
+                    mensajePagina: 'Error al registrar el usuario.'
+                });
             }
-        );
-    } catch (error) {
-        res.render('mensaje', { tituloPagina: 'ERROR', mensajePagina: 'Error ' + error });
-    }
+
+            res.render('mensaje', {
+                tituloPagina: 'Registro',
+                mensajePagina: 'Usuario registrado correctamente.'
+            });
+        }
+    );
 };
 
+// Mostrar formulario de inicio de sesión
 exports.loginForm = (req, res) => {
     res.render('login');
 };
@@ -41,58 +58,83 @@ exports.loginForm = (req, res) => {
 exports.login = (req, res) => {
     const { username, password } = req.body;
 
+    if (!username || !password) {
+        return res.render('mensaje', {
+            tituloPagina: 'LOGIN',
+            mensajePagina: 'El nombre de usuario y la contraseña son obligatorios.'
+        });
+    }
+
     db.query(
-        'SELECT * FROM users WHERE username=?',
+        'SELECT * FROM users WHERE username = ?',
         [username],
         (error, rsUsuario) => {
             if (error) {
                 console.error('Error en la consulta de usuario:', error);
-                res.render('mensaje', { 
-                    tituloPagina: 'LOGIN', 
-                    mensajePagina: 'Error al verificar las credenciales. Inténtelo más tarde.' 
+                return res.render('mensaje', {
+                    tituloPagina: 'LOGIN',
+                    mensajePagina: 'Error al verificar las credenciales.'
                 });
-            } else {
-                const usuario = rsUsuario[0];
-                if (usuario) {
-                    if (usuario.enabled == 1 && bcrypt.compareSync(password, usuario.password)) {
-                        req.session.user = usuario.username;
+            }
 
-                        // Verificar el tipo de usuario y redirigir
-                        const tipoUsuario = usuario.tipo ? usuario.tipo.toUpperCase() : ''; // Convertir a mayúsculas para asegurar coincidencia
+            const usuario = rsUsuario[0];
+            if (usuario) {
+                bcrypt.compare(password, usuario.password, (err, isMatch) => {
+                    if (err) {
+                        console.error('Error al comparar contraseñas:', err);
+                        return res.render('mensaje', {
+                            tituloPagina: 'LOGIN',
+                            mensajePagina: 'Error al verificar las credenciales.'
+                        });
+                    }
+
+                    if (isMatch && usuario.enabled == 1) {
+                        req.session.user = {
+                            id: usuario.id,
+                            username: usuario.username,
+                            tipo: usuario.tipo
+                        };
+                        const tipoUsuario = usuario.tipo.toUpperCase();
 
                         if (tipoUsuario === 'ADMIN') {
-                            // Redirigir al panel de administrador
-                            res.redirect('/admin/dashboard');  // Asegúrate de tener esta ruta definida
+                            res.redirect('/admin');
                         } else if (tipoUsuario === 'ENTRENADOR') {
-                            // Redirigir a las vistas dentro de la carpeta 'Entrenador'
-                            res.redirect('/Entrenador/add'); // Asegúrate de que esta ruta esté bien definida
+                            res.redirect('/Sesion'); 
                         } else if (tipoUsuario === 'CLIENTE') {
-                            // Redirigir a las vistas dentro de la carpeta 'Cliente'
-                            res.redirect('Cliente/add');  // Asegúrate de que esta ruta esté bien definida
+                            res.redirect('/Cliente'); 
                         } else {
-                            res.render('mensaje', { 
-                                tituloPagina: 'LOGIN', 
-                                mensajePagina: 'Rol de usuario desconocido.' 
+                            res.render('mensaje', {
+                                tituloPagina: 'LOGIN',
+                                mensajePagina: 'Rol de usuario desconocido.'
                             });
                         }
                     } else {
-                        res.render('mensaje', { 
-                            tituloPagina: 'LOGIN', 
-                            mensajePagina: 'Usuario desactivado o credenciales inválidas' 
+                        res.render('mensaje', {
+                            tituloPagina: 'LOGIN',
+                            mensajePagina: 'Credenciales inválidas o usuario desactivado.'
                         });
                     }
-                } else {
-                    res.render('mensaje', { 
-                        tituloPagina: 'LOGIN', 
-                        mensajePagina: 'Usuario no encontrado o credenciales incorrectas' 
-                    });
-                }
+                });
+            } else {
+                res.render('mensaje', {
+                    tituloPagina: 'LOGIN',
+                    mensajePagina: 'Usuario no encontrado.'
+                });
             }
         }
     );
 };
 
+// Cerrar sesión
 exports.logout = (req, res) => {
-    req.session.destroy();
-    res.redirect('/auth/login'); // Asegúrate de tener esta ruta de login definida
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error al cerrar sesión:', err);
+            return res.render('mensaje', {
+                tituloPagina: 'Error',
+                mensajePagina: 'Error al cerrar sesión. Inténtelo de nuevo.'
+            });
+        }
+        res.redirect('/auth/login');
+    });
 };

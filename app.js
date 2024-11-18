@@ -11,10 +11,11 @@ dotenv.config({ path: './stack_gym/.env' });
 const authRouter = require('./routes/authRouter');
 const entrenadorRouter = require('./routes/entrenadorRouter');
 const clienteRouter = require('./routes/clienteRouter');
+const adminRouter = require('./routes/adminRouter');
 
 // Inicializar la aplicación Express
 const app = express();
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 3000;
 
 // Configuración de middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,22 +30,21 @@ app.use(
     })
 );
 
+// Agregar el usuario autenticado como variable local en las vistas
 app.use((req, res, next) => {
-    res.locals.user = req.session.user || null; 
+    res.locals.user = req.session.user || null;
     next();
-  });
-  
+});
 
 // Configuración de vistas
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // Rutas
-app.use('/auth', authRouter); 
-app.use('/Entrenador', entrenadorRouter); 
-app.use('/Cliente',clienteRouter);
-
-
+app.use('/auth', authRouter);
+app.use('/Entrenador', entrenadorRouter);
+app.use('/Cliente', clienteRouter);
+app.use('/admin', adminRouter);
 
 // Ruta principal
 app.get('/', (req, res) => {

@@ -1,20 +1,17 @@
 extends ../templates/layout
 
-block content  
-    h3 Editar un cliente
-            div 
-                form(method="post") 
-                    label(for="nombre") Nombre:
-                    input(type="text", name="nombre", value=`${Cliente.Nombre}`)
-                    br
-                    label(for="email") Correo:
-                    input(type="email", name="email", value=`${Cliente.Correo}`)
-                    br
-                    label(for="fecha_registro") Fecha Registro:
-                    input(type="date", name="date", value=`${Cliente.Fecha_Registro}`)
-                    br
-                    label(for="telefono") Telefono:
-                    input(type="number", name="number", value=`${Cliente.Telefono}`)
-                    br
-                    input(type="hidden", name="id", value=`${Cliente.id}`)
-                    input(type="submit", value="Enviar")
+block content
+  h3 Editar Cliente
+  div.container
+    form(action=`/Cliente/edit/${cliente.id}` method="post")
+      input(type="hidden" name="id" value=cliente.id)
+      div.form-group
+        label Nombre:
+        input.form-control(type="text" name="nombre" value=cliente.Nombre required)
+      div.form-group
+        label Correo:
+        input.form-control(type="email" name="correo" value=cliente.Correo required)
+      div.form-group
+        label Teléfono:
+        input.form-control(type="text" name="telefono" value=cliente.Telefono required)
+      button.btn.btn-primary(type="submit") Guardar Cambios

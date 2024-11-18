@@ -1,30 +1,31 @@
 extends ../templates/layout
 
-block content  
-    div 
-        h3 Listado de clientes
-        table(border=1)
-            thead 
-                tr
-                    th id
-                    th Nombre 
-                    th Correo
-                    th Fecha Registro 
-                    th Telefono
-                    th Editar
-                    th Borrar
-            tbody 
-                each cliente in Cliente
-                    tr 
-                        td=cliente.id
-                        td=cliente.Nombre                        
-                        td=cliente.Correo
-                        td=cliente.Fecha_Registro 
-                        td=cliente.Telefono
-                        td 
-                            a(href=`/Cliente/edit/${cliente.id}`) Editar 
-                        td 
-                            a(href=`/Cliente/delete/${cliente.id}`) Borrar 
-        p 
-            a(href="/Cliente/add") Añadir un nuevo cliente
-    
+block content
+  h3 Listado de Clientes
+  div.container
+    div.text-right.mt-3
+      a.btn.btn-primary(href="/Cliente/add") Añadir un nuevo cliente
+    table.table.table-bordered.table-hover
+      thead
+        tr
+          th ID
+          th Nombre
+          th Correo
+          th Fecha Registro
+          th Teléfono
+          th Acciones
+      tbody
+        if clientes && clientes.length > 0
+          each cliente in clientes
+            tr
+              td= cliente.id
+              td= cliente.Nombre
+              td= cliente.Correo
+              td= cliente.Fecha_Registro.toLocaleDateString()
+              td= cliente.Telefono
+              td
+                a.btn.btn-warning(href=`/Cliente/edit/${cliente.id}`) Editar
+                a.btn.btn-danger(href=`/Cliente/delete/${cliente.id}`) Borrar
+        else
+          tr
+            td(colspan="6") No se encontraron clientes.

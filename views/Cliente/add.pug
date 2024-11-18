@@ -1,19 +1,21 @@
 extends ../templates/layout
 
-block content  
-    h3 Añadir un nuevo cliente
-        div 
-            form(action="/Cliente/add", method="post") 
-                label(for="Nombre") Nombre:
-                input(type="text", name="nombre")
-                br
-                label(for="Correo") Correo:
-                input(type="email", name="email")  
-                br        
-                label(for="Fecha_Registro") Fecha de registro:   
-                input(type="date", name="date") 
-                br
-                label(for="Telefono") Telefono:    
-                input(type="number", name="number")      
-                br       
-                input(type="submit", value="Enviar")
+block content
+  div.container.d-flex.justify-content-center.align-items-center.min-vh-100
+    div.card.shadow.p-4
+      h3.text-center.mb-4 Añadir un nuevo cliente
+      form(action="/Cliente/add" method="post")
+        div.form-group.mb-3
+          label Nombre:
+          input.form-control(type="text" name="nombre" required)
+        div.form-group.mb-3
+          label Correo:
+          input.form-control(type="email" name="correo" required)
+        div.form-group.mb-3
+          label Fecha de registro:
+          input.form-control(type="date" name="fecha_registro" required)
+        div.form-group.mb-4
+          label Teléfono:
+          input.form-control(type="text" name="telefono" required)
+        div.text-center
+          button.btn.btn-primary(type="submit") Enviar

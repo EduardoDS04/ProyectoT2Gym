@@ -61,11 +61,12 @@ CREATE TABLE IF NOT EXISTS users(
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
-  `enabled`BOOL,
+  `enabled` BOOL,
   tipo ENUM('ENTRENADOR', 'CLIENTE', 'ADMIN'),
   Cliente INT REFERENCES Cliente(id),
-  Entrenador INT REFERENCES Enternador(id)
+  Entrenador INT REFERENCES Entrenador(id)
 );
+
 
 INSERT INTO `users` (`username`, `password`, `enabled`, `tipo`)
   VALUES ('pepe', 'Secreto_123', 1, 'ENTRENADOR');
@@ -94,7 +95,7 @@ VALUES
 
 
 -- Insertar datos en Entrenador
-INSERT INTO `Entrenador`(`id`, `Nombre`, `Especialidad`, `Nivel_Experiencia`)
+INSERT INTO Entrenador (`id`, `Nombre`, `Especialidad`, `Nivel_Experiencia`)
   VALUES
     (1, 'Lucía', 'Crossfit', 'Intermedio'),
     (2, 'José', 'Pesas', 'Avanzado'),
@@ -104,7 +105,7 @@ INSERT INTO `Entrenador`(`id`, `Nombre`, `Especialidad`, `Nivel_Experiencia`)
 
 
 -- Insertar datos en Plan_Membresia
-INSERT INTO `Plan_Membresia`(`id`, `Nombre_Plan`, `Duracion_Meses`, `Costo`)
+INSERT INTO Plan_Membresia (`id`, `Nombre_Plan`, `Duracion_Meses`, `Costo`)
   VALUES
     (1, 'Básico Anual', 12, 214.63),
     (2, 'Premium Mensual', 6, 181.74),
@@ -151,6 +152,22 @@ VALUES
     (2, 2, '2005-07-14'),
     (10, 1, '2011-01-26'),
     (6, 1, '2017-07-26');
+
+ALTER TABLE Sesion
+DROP FOREIGN KEY Sesion_ibfk_1;
+
+ALTER TABLE Sesion
+ADD CONSTRAINT Sesion_ibfk_1
+FOREIGN KEY (id_Cliente) REFERENCES Cliente(id)
+ON DELETE CASCADE;
+
+ALTER TABLE ClientePlan
+DROP FOREIGN KEY ClientePlan_ibfk_1;
+
+ALTER TABLE ClientePlan
+ADD CONSTRAINT ClientePlan_ibfk_1
+FOREIGN KEY (id_Cliente) REFERENCES Cliente(id)
+ON DELETE CASCADE;
 
 
 

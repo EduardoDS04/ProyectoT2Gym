@@ -1,20 +1,12 @@
 extends ../templates/layout
 
-block content  
-    h3 Borrar un cliente
-            div 
-                form(method="post") 
-                    label(for="nombre") Nombre:
-                    input(type="text", name="nombre", value=`${Cliente.Nombre}`,disabled)
-                    br
-                    label(for="email") Correo:
-                    input(type="email", name="email", value=`${Cliente.Correo}`,disabled)
-                    br
-                    label(for="fecha_registro") Fecha Registro:
-                    input(type="date", name="date", value=`${Cliente.Fecha_Registro}`,disabled)
-                    br
-                     label(for="telefono") Telefono:
-                    input(type="number", name="number", value=`${Cliente.Telefono}`,disabled)
-                    br
-                    input(type="hidden", name="id", value=`${Cliente.id}`)
-                    input(type="submit", value="Enviar")
+block content
+  h3 Eliminar Cliente
+  div.container
+    if cliente
+      p ¿Estás seguro de que deseas eliminar al cliente "#{cliente.Nombre}"?
+      form(action=`/Cliente/delete/${cliente.id}` method="post")
+        button.btn.btn-danger(type="submit") Confirmar Eliminación
+        a.btn.btn-secondary(href="/Cliente") Cancelar
+    else
+      p No se ha encontrado el cliente.

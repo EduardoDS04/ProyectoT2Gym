@@ -1,0 +1,35 @@
+extends ../templates/layout
+
+block content
+  h3 Panel de Administración
+  div.container
+    div.row
+      div.col-md-3
+        div.card.shadow
+          div.card-body.text-center
+            h4 Total Clientes
+            p #{datosPanel.totalClientes || 0}
+            a.btn.btn-primary.btn-block(href="/Cliente") Ver Clientes
+      div.col-md-3
+        div.card.shadow
+          div.card-body.text-center
+            h4 Total Entrenadores
+            p #{datosPanel.totalEntrenadores || 0}
+            a.btn.btn-primary.btn-block(href="/Entrenador") Ver Entrenadores
+      div.col-md-3
+        div.card.shadow
+          div.card-body.text-center
+            h4 Total Planes
+            p #{datosPanel.totalPlanes || 0}
+            a.btn.btn-primary.btn-block(href="/Plan_Membresia") Ver Planes
+      div.col-md-3
+        div.card.shadow
+          div.card-body.text-center
+            h4 Total Sesiones
+            p #{datosPanel.totalSesiones || 0}
+            a.btn.btn-primary.btn-block(href="/Sesion") Ver Sesiones
+    div.row.mt-4
+      div.col-md-4
+        a.btn.btn-success(href="/ClientePlan") Gestionar Planes de Clientes
+      div.col-md-4
+        a.btn.btn-warning(href="/auth/logout") Cerrar Sesión

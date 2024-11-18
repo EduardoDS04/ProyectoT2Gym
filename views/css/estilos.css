@@ -1,3 +1,47 @@
-h1,h2,h3 {
-    color:grey;
-}
+h1, h2, h3 {
+    color: grey;
+  }
+  
+  .table th, .table td {
+    text-align: center;
+    padding: 10px; 
+  }
+  
+  .table th {
+    background-color: #f8f9fa; 
+  }
+  
+  .table td {
+    vertical-align: middle;
+  }
+  
+  .btn {
+    margin: 5px;  
+    padding: 5px 10px; 
+  }
+  
+  .text-center {
+    text-align: center; 
+  }
+  
+  .mt-3 {
+    margin-top: 1rem;  
+  }
+  
+  .card {
+    max-width: 500px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+  }
+  
+  .form-control {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  button.btn-primary {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
