@@ -1,19 +1,17 @@
 extends ../templates/layout
 
 block content 
-        h3 Añadir un nuevo entrenador
-            div 
-                form(action="/Entrenador/add", method="post") 
-                    label(for="nombre") Nombre:
-                    input(type="text", name="nombre")
-                    br
-                    label(for="especialidad") Especialidad:
-                    input(type="text", name="text")  
-                    br        
-                    label(for="nivel_experiencia") Nivel Experiencia:    
-                    input(type="text", name="text")      
-                    br       
-                    input(type="submit", value="Enviar")
-
+    h3 Agregar nuevo entrenador
+form(method="post")
+  label(for="nombre") Nombre:
+  input(type="text", name="nombre")
+  br
+  label(for="especialidad") Especialidad:
+  input(type="text", name="especialidad")
+  br
+  label(for="nivel_experiencia") Nivel de experiencia:
+  input(type="text", name="nivel_experiencia")
+  br
+  input(type="submit", value="Enviar")
 
             

@@ -1,21 +1,20 @@
 extends ../templates/layout
 
-block content  
-    h3 Editar un entrenador
-            div 
-                form(method="post") 
-                    label(for="nombre") Nombre:
-                    input(type="text", name="nombre", value=`${Entrenador.Nombre}`)
-                    br
-                    label(for="especialidad") Especialidad:
-                    input(type="text", name="text", value=`${Entrenador.Especialidad}`)
-                    br
-                    label(for="nivel_experiencia") Nivel experiencia:
-                    input(type="text", name="text", value=`${Entrenador.Nivel_Experiencia}`)
-                    br
-                    input(type="hidden", name="id", value=`${Entrenador.id}`)
-                    input(type="submit", value="Enviar")
-
+block content
+  h3 Editar un entrenador
+  div
+    form(method="post") 
+      label(for="nombre") Nombre:
+      input(type="text", name="nombre", value=entrenador.Nombre) 
+      br
+      label(for="especialidad") Especialidad:
+      input(type="text", name="especialidad", value=entrenador.Especialidad)  
+      br
+      label(for="nivel_experiencia") Nivel experiencia:
+      input(type="text", name="nivel_experiencia", value=entrenador.Nivel_Experiencia)  
+      br
+      input(type="hidden", name="id", value=entrenador.id) 
+      input(type="submit", value="Enviar")
 
 
 
