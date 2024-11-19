@@ -92,7 +92,7 @@ VALUES
     (8, 'José', 'cliente8@gymcorreo.com', '1992-06-26', '555-9572'),
     (9, 'Lucía', 'cliente9@gymcorreo.com', '2019-09-06', '555-3335'),
     (10, 'María', 'cliente10@gymcorreo.com', '1990-09-22', '555-7920');
-
+    
 
 -- Insertar datos en Entrenador
 INSERT INTO Entrenador (`id`, `Nombre`, `Especialidad`, `Nivel_Experiencia`)

@@ -17,4 +17,16 @@ router.get('/edit/:id', clienteController.clienteEditFormulario);
 
 router.post('/edit/:id', clienteController.clienteEdit);
 
+router.get('/mi-perfil', clienteController.miPerfil);
+
+router.post('/mi-perfil', clienteController.actualizarPerfil);
+
+router.post('/eliminar-perfil', clienteController.eliminarPerfil);
+
+router.get('/registro', (req, res) => {
+    res.render('Cliente/registro');
+});
+
+router.post('/registro', clienteController.registrarCliente);
+
 module.exports = router;

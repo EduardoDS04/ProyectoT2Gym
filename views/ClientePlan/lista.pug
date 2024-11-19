@@ -1,0 +1,29 @@
+extends ../templates/layout
+
+block content
+  h3 Mis Planes de Membresía
+  div.container
+    table.table.table-bordered
+      thead
+        tr
+          th ID del Cliente
+          th Nombre del Cliente
+          th Nombre del Plan
+          th Fecha de Inicio
+          th Acción
+      tbody
+        if planes.length > 0
+          each plan, index in planes
+            tr
+              if index === 0
+                td(rowspan=planes.length)= cliente.ID
+                td(rowspan=planes.length)= cliente.Nombre
+              td= plan.Nombre_Plan
+              td= plan.Fecha_Inicio.toLocaleDateString()
+              td.text-center
+                a.btn.btn-primary.me-2(href='/Plan_Membresia') Cambiar Plan
+                form(action=`/ClientePlan/eliminar/${plan.id}` method='post' class="d-inline")
+                  button.btn.btn-danger(type='submit') Eliminar Plan
+        else
+          tr
+            td(colspan='5') No tienes planes asignados.

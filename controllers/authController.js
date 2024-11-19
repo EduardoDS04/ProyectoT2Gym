@@ -19,7 +19,7 @@ exports.register = (req, res) => {
     // Encriptar la contraseña
     const hashedPassword = bcrypt.hashSync(password, 10);
 
-    //(por defecto CLIENTE)
+    // por defecto CLIENTE
     const tipoUsuario = ['ADMIN', 'ENTRENADOR', 'CLIENTE'].includes(tipo) ? tipo : 'CLIENTE';
 
     // Insertar usuario en la base de datos
@@ -99,9 +99,9 @@ exports.login = (req, res) => {
                         if (tipoUsuario === 'ADMIN') {
                             res.redirect('/admin');
                         } else if (tipoUsuario === 'ENTRENADOR') {
-                            res.redirect('/Sesion'); 
+                            res.redirect('/Entrenador'); 
                         } else if (tipoUsuario === 'CLIENTE') {
-                            res.redirect('/Cliente'); 
+                            res.redirect('/Cliente/registro'); 
                         } else {
                             res.render('mensaje', {
                                 tituloPagina: 'LOGIN',

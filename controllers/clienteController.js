@@ -38,7 +38,7 @@ exports.clienteAdd = (req, res) => {
       if (error) {
         return res.send('Error al insertar el cliente: ' + error);
       } else {
-        res.redirect('/Cliente');  // Redirigir después de la inserción
+        res.redirect('/Cliente');  
       }
     }
   );
@@ -152,7 +152,7 @@ exports.clienteEdit = (req, res) => {
   // Actualización del cliente
   db.query(
       'UPDATE Cliente SET Nombre = ?, Correo = ?, Telefono = ? WHERE id = ?',
-      [nombre, correo, telefono, id],  // Elimina Fecha_Registro
+      [nombre, correo, telefono, id], 
       (error, respuesta) => {
           if (error) {
               return res.send('Error actualizando cliente: ' + error);
@@ -163,64 +163,94 @@ exports.clienteEdit = (req, res) => {
   );
 };
 
+// Manejar registro de cliente
+exports.registrarCliente = (req, res) => {
+  const { Nombre, Correo, Telefono } = req.body;
+  const fechaRegistro = new Date(); // Fecha actual
 
-
-
-
-
-
-
-
-// Maestro-Detalle ClientePlan
-// Listar clientes asociados a un plan específico
-exports.listaClientesPlan = (req, res) => {
-  const { idPlan } = req.query;
-  if (req.session.user) {
-    db.query(
-      'SELECT c.*, cp.Fecha_Inicio FROM Cliente c INNER JOIN ClientePlan cp ON c.id = cp.Cliente_id WHERE cp.Plan_Membresia = ?',
-      [idPlan],
-      (err, response) => {
-        if (err) res.send('ERROR al hacer la consulta');
-        else res.render('ClientePlan/lista', { clientes: response, idPlan, user: req.session.user });
-      }
-    );
-  } else {
-    res.redirect('/auth/login');
+  if (!Nombre || !Correo || !Telefono) {
+      return res.render('mensaje', {
+          tituloPagina: 'Registro',
+          mensajePagina: 'Todos los campos son obligatorios.'
+      });
   }
+
+  db.query(
+      'INSERT INTO Cliente (Nombre, Correo, Fecha_Registro, Telefono) VALUES (?, ?, ?, ?)',
+      [Nombre, Correo, fechaRegistro, Telefono],
+      (err, result) => {
+          if (err) {
+              console.error('Error al registrar cliente:', err);
+              return res.render('mensaje', {
+                  tituloPagina: 'Error',
+                  mensajePagina: 'No se pudo registrar al cliente. Intenta más tarde.'
+              });
+          }
+          req.session.user.id_Cliente = result.insertId;
+          res.redirect('/Plan_Membresia');
+      }
+  );
 };
 
-// Asignar un nuevo cliente a un plan
-exports.asignarClientePlan = (req, res) => {
-  const { idPlan } = req.params;
-  const { clienteId, fechaInicio } = req.body;
-  if (req.session.user) {
-    db.query(
-      'INSERT INTO ClientePlan (Cliente_id, Plan_Membresia, Fecha_Inicio) VALUES (?, ?, ?)',
-      [clienteId, idPlan, fechaInicio],
+
+
+
+// Mostrar formulario de edición del perfil
+exports.miPerfil = (req, res) => {
+    const id_Cliente = req.session.user.id_Cliente;
+
+    db.query('SELECT * FROM Cliente WHERE id = ?', [id_Cliente], (err, results) => {
+        if (err) {
+            console.error('Error al obtener los datos del cliente:', err);
+            return res.status(500).send('Error al obtener los datos del cliente.');
+        }
+
+        if (results.length === 0) {
+            console.error('No se encontró el cliente con el ID:', id_Cliente);
+            return res.status(404).send('Cliente no encontrado.');
+        }
+
+        const cliente = results[0];
+        res.render('Cliente/mi-perfil', { cliente });
+    });
+};
+
+
+// Guardar los cambios en el perfil
+exports.actualizarPerfil = (req, res) => {
+  const { Nombre, Correo, Telefono } = req.body;
+  const id_Cliente = req.session.user.id_Cliente;
+
+  db.query(
+      'UPDATE Cliente SET Nombre = ?, Correo = ?, Telefono = ? WHERE id = ?',
+      [Nombre, Correo, Telefono, id_Cliente],
       (err) => {
-        if (err) res.send('ERROR al asignar cliente');
-        else res.redirect(`/ClientePlan?plan=${idPlan}`);
+          if (err) {
+              console.error('Error al actualizar el perfil:', err);
+              return res.status(500).send('Error al actualizar el perfil.');
+          }
+
+          res.redirect('/Cliente/mi-perfil');
       }
-    );
-  } else {
-    res.redirect('/auth/login');
-  }
+  );
 };
 
-// Eliminar un cliente de un plan
-exports.eliminarClientePlan = (req, res) => {
-  const { idPlan, clienteId } = req.params;
-  if (req.session.user) {
-    db.query(
-      'DELETE FROM ClientePlan WHERE Cliente_id = ? AND Plan_Membresia = ?',
-      [clienteId, idPlan],
-      (err) => {
-        if (err) res.send('ERROR al dar de baja al cliente');
-        else res.redirect(`/ClientePlan?plan=${idPlan}`);
-      }
-    );
-  } else {
-    res.redirect('/auth/login');
-  }
-};
+// Eliminar el perfil
+exports.eliminarPerfil = (req, res) => {
+  const id_Cliente = req.session.user.id_Cliente;
 
+  db.query('DELETE FROM Cliente WHERE id = ?', [id_Cliente], (err) => {
+      if (err) {
+          console.error('Error al eliminar el perfil:', err);
+          return res.status(500).send('Error al eliminar el perfil.');
+      }
+
+      // Cerrar la sesión y redirigir al login
+      req.session.destroy((err) => {
+          if (err) {
+              console.error('Error al cerrar sesión después de eliminar el perfil:', err);
+          }
+          res.redirect('/auth/login');
+      });
+  });
+};

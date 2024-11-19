@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+
 // Configuración del archivo .env
 dotenv.config({ path: './stack_gym/.env' });
 
@@ -12,6 +13,8 @@ const authRouter = require('./routes/authRouter');
 const entrenadorRouter = require('./routes/entrenadorRouter');
 const clienteRouter = require('./routes/clienteRouter');
 const adminRouter = require('./routes/adminRouter');
+const planMembresiaRouter = require('./routes/planMembresiaRouter');
+const clientePlanRouter = require('./routes/clientePlanRouter');
 
 // Inicializar la aplicación Express
 const app = express();
@@ -45,6 +48,9 @@ app.use('/auth', authRouter);
 app.use('/Entrenador', entrenadorRouter);
 app.use('/Cliente', clienteRouter);
 app.use('/admin', adminRouter);
+app.use('/Plan_Membresia', planMembresiaRouter);
+app.use('/ClientePlan', clientePlanRouter);
+
 
 // Ruta principal
 app.get('/', (req, res) => {

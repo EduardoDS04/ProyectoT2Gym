@@ -1,6 +1,9 @@
 extends templates/layout
-
 block content
-  
-  h3 Bienvenido a este gimnasio
-  p Seleccione una opción de la lista para continuar
+  .container.text-center.mt-5
+    h1 Bienvenido al Gimnasio
+    p Explora nuestras membresías y sesiones personalizadas.
+
+    if !user || (user && user.tipo === 'CLIENTE' && !user.completo)
+      // Mostrar el botón de Registro si el usuario no está registrado completamente
+      a.btn.btn-primary.mt-3(href='/Cliente/registro') Completa tu Registro

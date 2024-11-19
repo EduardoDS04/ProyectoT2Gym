@@ -6,36 +6,26 @@ nav.navbar.navbar-expand-lg.bg-light
     .collapse.navbar-collapse#navbarSupportedContent
       ul.navbar-nav.me-auto.mb-2.mb-lg-0        
         li.nav-item
-          a.nav-link(href="/") Inicio
+          a.nav-link(href='/') Inicio
+
         if user
-          // Opciones para ADMIN
           if user.tipo === 'ADMIN'
             li.nav-item
-              a.nav-link(href="/Cliente") Clientes
+              a.nav-link(href='/Cliente') Clientes
             li.nav-item
-              a.nav-link(href="/Entrenador") Entrenadores
+              a.nav-link(href='/Entrenador') Entrenadores
             li.nav-item
-              a.nav-link(href="/admin") Panel de Administración
+              a.nav-link(href='/admin') Panel de Administracion
 
-          // Opciones para ENTRENADOR
-          if user.tipo === 'ENTRENADOR'
-            li.nav-item
-              a.nav-link(href="/Entrenador") Entrenadores
-           
-               
-
-          // Opciones para CLIENTE
           if user.tipo === 'CLIENTE'
             li.nav-item
-              a.nav-link(href="/Plan_Membresia") Planes de Membresía
+              a.nav-link(href='/Plan_Membresia') Planes de Membresía
             li.nav-item
-              a.nav-link(href="/ClientePlan") Mis Planes
-
-          // Opción para cerrar sesión
+              a.nav-link(href='/ClientePlan') Mis Planes
+            li.nav-item
+              a.nav-link(href='/Cliente/mi-perfil') Mi Perfil
           li.nav-item
-            a.nav-link(href="/auth/logout") Cerrar sesión
-
+            a.nav-link(href='/auth/logout') Cerrar sesión
         else
-          // Opción para usuarios no autenticados
           li.nav-item
-            a.nav-link(href="/auth/login") Iniciar sesión
+            a.nav-link(href='/auth/login') Iniciar sesión

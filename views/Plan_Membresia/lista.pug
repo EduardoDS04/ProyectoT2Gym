@@ -1,0 +1,24 @@
+extends ../templates/layout
+
+block content
+  div.container
+    h2 Planes de Membresía
+
+    p.text-muted Al seleccionar un nuevo plan, se reemplazará el plan actual.
+
+    table.table.table-bordered
+      thead
+        tr
+          th Nombre del Plan
+          th Duración (Meses)
+          th Costo
+          th Acción
+      tbody
+        each plan in planes
+          tr
+            td= plan.Nombre_Plan
+            td= plan.Duracion_Meses
+            td= plan.Costo
+            td
+              form(action=`/Plan_Membresia/asignar/${plan.id}` method='POST')
+                button.btn.btn-primary(type='submit') Elegir este plan
