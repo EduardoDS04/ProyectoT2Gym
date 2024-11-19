@@ -1,0 +1,21 @@
+extends ../templates/layout
+
+block content
+    h3 Listado de sesiones
+    div.container
+        table.table.table-bordered.table-hover
+            thead
+                tr
+                    th ID Sesión
+                    th Fecha
+                    th Hora
+                    th Duración (min)
+                    th Cliente
+            tbody
+                each sesion in sesiones
+                    tr
+                        td= sesion.id
+                        td= sesion.Fecha
+                        td= sesion.Hora
+                        td= sesion.Duracion_Minutos
+                        td= sesion.id_Cliente

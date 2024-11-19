@@ -15,6 +15,7 @@ const clienteRouter = require('./routes/clienteRouter');
 const adminRouter = require('./routes/adminRouter');
 const planMembresiaRouter = require('./routes/planMembresiaRouter');
 const clientePlanRouter = require('./routes/clientePlanRouter');
+const sesionRoutes = require('./routes/sesionRouter');
 
 // Inicializar la aplicación Express
 const app = express();
@@ -50,6 +51,7 @@ app.use('/Cliente', clienteRouter);
 app.use('/admin', adminRouter);
 app.use('/Plan_Membresia', planMembresiaRouter);
 app.use('/ClientePlan', clientePlanRouter);
+app.use('/sesion', sesionRoutes);
 
 
 // Ruta principal
