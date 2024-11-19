@@ -2,6 +2,8 @@
 ## Eduardo Díaz y María López
 
 
+### CREACIÓN DEL PROYECTO
+
 En primer lugar, creamos una carpeta y dentro de ella se ejecuta:
  `npm install express express-session mysql2 pug body-parser dotenv`
 
@@ -10,7 +12,10 @@ En primer lugar, creamos una carpeta y dentro de ella se ejecuta:
  - package.json
  - node_modules
   
-Creamos el fichero _.gitignore_ que contiene
+
+
+### GIT  
+Creamos el fichero `.gitignore` que contiene
 ```bash
 node_modules
 package-lock.json
@@ -19,9 +24,19 @@ package-lock.json
 
 Y hacemos un _git init_, que nos creará un nuevo repositorio git.
 
-Hemos creado una carpeta llamada *stack_gym* que contiene el **docker-compose.yml**, el **.env** y una carpeta **script** con un fichero **initdb.sql** que contendrá las tablas.
+Para hacer un commit a una rama estando en otra:
+Por ejemplo de la rama dev quiero comitear a la rama maria.
+`git merge maria`  y luego un `git merge origin dev`
 
-docker-compose.yml
+Para actualizar el repositorio con el comit subido al git:
+`git pull`
+
+
+### STACK_GYM
+
+Hemos creado una carpeta llamada **stack_gym** que contiene el `docker-compose.yml`, el `.env` y una carpeta **script** con un fichero `initdb.sql` que contendrá las tablas.
+
+_docker-compose.yml_
 ```bash
 version: '3.1'
 
@@ -44,7 +59,7 @@ services:
       - ./scripts:/docker-entrypoint-initdb.d
 ``` 
 
-.env
+_.env_
 ```bash
 MYSQL_ROOT_PASSWORD = zx76wbz7FG89k
 MYSQL_USERNAME=root
@@ -54,7 +69,7 @@ MYSQL_HOST=localhost
 ADMINER_PORT= 8182
 ```
 
-Fichero initdb.sql para crear las tablas 
+Fichero `initdb.sql` para crear las tablas y se ha insertado los datos de cada una de ellas.
 ```bash
 CREATE DATABASE IF NOT EXISTS `gimnasio`;
 
@@ -105,20 +120,6 @@ CREATE TABLE Sesion (
 );
 
 
-CREATE TABLE IF NOT EXISTS users(
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `enabled`BOOL,
-  tipo ENUM('ENTRENADOR', 'CLIENTE', 'ADMIN'),
-  Cliente INT REFERENCES Cliente(id),
-  Entrenador INT REFERENCES Enternador(id)
-);
-
-INSERT INTO `users` (`username`, `password`, `enabled`, `tipo`)
-  VALUES ('pepe', 'Secreto_123', 'ENTRENADOR');
-
-
 -- Tabla para ClientePlan
 CREATE TABLE ClientePlan (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -128,6 +129,20 @@ CREATE TABLE ClientePlan (
     FOREIGN KEY (id_Cliente) REFERENCES Cliente(id),
     FOREIGN KEY (id_Plan) REFERENCES Plan_Membresia(id)
 );
+
+CREATE TABLE IF NOT EXISTS users(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `enabled` BOOL,
+  tipo ENUM('ENTRENADOR', 'CLIENTE', 'ADMIN'),
+  Cliente INT REFERENCES Cliente(id),
+  Entrenador INT REFERENCES Entrenador(id)
+);
+
+
+INSERT INTO `users` (`username`, `password`, `enabled`, `tipo`)
+  VALUES ('pepe', 'Secreto_123', 1, 'ENTRENADOR');
 
 
 
@@ -150,10 +165,10 @@ VALUES
     (8, 'José', 'cliente8@gymcorreo.com', '1992-06-26', '555-9572'),
     (9, 'Lucía', 'cliente9@gymcorreo.com', '2019-09-06', '555-3335'),
     (10, 'María', 'cliente10@gymcorreo.com', '1990-09-22', '555-7920');
-
+    
 
 -- Insertar datos en Entrenador
-INSERT INTO `Entrenador`(`id`, `Nombre`, `Especialidad`, `Nivel_Experiencia`)
+INSERT INTO Entrenador (`id`, `Nombre`, `Especialidad`, `Nivel_Experiencia`)
   VALUES
     (1, 'Lucía', 'Crossfit', 'Intermedio'),
     (2, 'José', 'Pesas', 'Avanzado'),
@@ -163,7 +178,7 @@ INSERT INTO `Entrenador`(`id`, `Nombre`, `Especialidad`, `Nivel_Experiencia`)
 
 
 -- Insertar datos en Plan_Membresia
-INSERT INTO `Plan_Membresia`(`id`, `Nombre_Plan`, `Duracion_Meses`, `Costo`)
+INSERT INTO Plan_Membresia (`id`, `Nombre_Plan`, `Duracion_Meses`, `Costo`)
   VALUES
     (1, 'Básico Anual', 12, 214.63),
     (2, 'Premium Mensual', 6, 181.74),
@@ -211,28 +226,73 @@ VALUES
     (10, 1, '2011-01-26'),
     (6, 1, '2017-07-26');
 
+ALTER TABLE Sesion
+DROP FOREIGN KEY Sesion_ibfk_1;
+
+ALTER TABLE Sesion
+ADD CONSTRAINT Sesion_ibfk_1
+FOREIGN KEY (id_Cliente) REFERENCES Cliente(id)
+ON DELETE CASCADE;
+
+ALTER TABLE ClientePlan
+DROP FOREIGN KEY ClientePlan_ibfk_1;
+
+ALTER TABLE ClientePlan
+ADD CONSTRAINT ClientePlan_ibfk_1
+FOREIGN KEY (id_Cliente) REFERENCES Cliente(id)
+ON DELETE CASCADE;
+
+
+
+ALTER TABLE Sesion DROP FOREIGN KEY Sesion_ibfk_2;
+ALTER TABLE Sesion
+ADD CONSTRAINT Sesion_ibfk_2
+FOREIGN KEY (id_Entrenador) REFERENCES Entrenador(id)
+ON DELETE CASCADE;
+
 ```
+### VISTAS
 
 Creamos la carpeta **views** y dentro tenemos las siguientes carpetas con sus ficheros pug, que serán las vistas:
 
-**CLIENTE**
+**Admin**
+- _panel.pug_
+  
+**Cliente**
 - _add.pug_
 - _delete.pug_
 - _edit.pug_
 - _lista.pug_
+- _mi.perfil_
+- _registro.pug_
 
-**ENTRENADOR**
+**ClientePlan**
+- _lista.pug_
+
+**Entrenador**
 - _add.pug_
 - _delete.pug_
 - _edit.pug_
 - _lista.pug_
+- _sesion.pug_
 
-**PLAN_MEMBRESIA**
-- _add.pug_
-- _delete.pug_
-- _edit.pug_
+**PlanMembresia**
 - _lista.pug_
 
+**Css**
+- _estilos.css_
+
+**Teplates**
+- _footer.pug_
+- _head.pug_
+- _header.pug_
+- _layout.pug_
+
+En la misma carpeta **views**:
+- _index.pug_
+- _login.pug_
+- _mensaje.pug_
+- _register.pug_
 
 
 ### CRUD Cliente
@@ -259,3 +319,301 @@ Creamos la carpeta **views** y dentro tenemos las siguientes carpetas con sus fi
 | **GET** | _/Entrenador/delete/:id_ | Muestra el formulario para borrar el entrenador |
 | **POST** | _/Entrenador/delete/:id_ | Eliminar al entrenador de la base de datos.|
 
+
+### LOGUEO, USUARIOS, REGISTRO
+
+Al ejecutar la aplicación nos saldrá el logueo y en caso de no tener ususario pulsaremos el botón registrar. Una vez guardado el ususario se podrá entrar en la aplicación.
+Depende de que tipo de usuario seas _admin_, _cliente_, _entrenador_ tendrás un menú u otro.
+
+_Vista del logueo:_
+```pug
+extends templates/layout
+
+block content
+    .container 
+        h1 Login en el sistema
+        form(action="/auth/login", method="post") 
+            
+            label.form-label(for="username") Nombre de Usuario
+            input.form-control(type="text", name="username", id="username")
+            br
+            
+            label.form-label(for="password") Contraseña
+            input.form-control(type="password", name="password" id="password")
+            br
+            
+            
+            button.btn.btn-primary(type="submit") Iniciar sesión
+            
+        p ¿Sin usuario? Regístrese 
+            a(href="/auth/register") aquí.
+``` 
+
+_Vista del registro:_
+```pug
+extends templates/layout
+block content
+    .container 
+        h1 Alta en el sistema
+
+        form.row.g-3(action="/auth/register", method="post") 
+            
+            .col-md-6
+                label.form-label(for="username") Usuario
+                input.form-control(type="text", name="username", id="username", required)
+
+                label.form-label(for="password") Contraseña
+                input.form-control(type="password", name="password" id="password", required)
+
+                label.form-label(for="tipo") Tipo de usuario
+                select.form-control(name="tipo", id="tipo", required)
+                    option(value="ENTRENADOR") Entrenador
+                    option(value="CLIENTE") Cliente
+                    option(value="ADMIN") Admin
+
+            .col-12
+                button.btn.btn-success(type="submit") Registrarme
+``` 
+
+Si el usuario entra como **CLIENTE** se mostrará una vista para que se complete el registro del perfil, a continuacion un plan de Membresía a elegir, y una vista para ver los planes que tiene el usuario.
+
+Si el usuario entra como **ENTRENADOR** se mostrará un listado de todos los entrenadores, con un crud, y un boton para ver las sesiones que tiene cada entrenador.
+
+Si el usuario entra como **ADMIN** se mostrará el total de clientes, entrenadores, planes y sesiones.
+
+### ROUTES Y CONTROLLER
+
+Para que cada vista tenga un funcionamiento necesitamos una carpeta **routes**, con los métodos que se utilizarán en el controller.
+
+_authRouter_
+```java
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/authController');
+
+router.get('/register', authController.registerForm);
+
+router.post('/register', authController.register);
+
+router.get('/login', authController.loginForm);
+
+router.post('/login', authController.login);
+
+router.get('/logout', authController.logout);
+
+module.exports=router;
+``` 
+
+_clientePlanRouter_
+```java
+const express = require('express');
+const router = express.Router();
+const clientePlanController = require('../controllers/clientePlanController');
+
+router.get('/', clientePlanController.listarPlanesCliente);
+router.post('/eliminar/:id', clientePlanController.eliminarPlan); 
+
+module.exports = router;
+```
+
+_clienteRouter_
+```java
+const express = require('express');
+const router = express.Router();
+const clienteController = require('../controllers/clienteController');
+
+router.get('/', clienteController.clientes);
+
+router.get('/add', clienteController.clienteAddFormulario);
+
+router.post('/add', clienteController.clienteAdd);
+
+router.get('/delete/:id', clienteController.clienteDelFormulario);
+
+router.post('/delete/:id', clienteController.clienteDel);
+
+router.get('/edit/:id', clienteController.clienteEditFormulario);
+
+router.post('/edit/:id', clienteController.clienteEdit);
+
+router.get('/mi-perfil', clienteController.miPerfil);
+
+router.post('/mi-perfil', clienteController.actualizarPerfil);
+
+router.post('/eliminar-perfil', clienteController.eliminarPerfil);
+
+router.get('/registro', (req, res) => {
+    res.render('Cliente/registro');
+});
+
+router.post('/registro', clienteController.registrarCliente);
+
+module.exports = router;
+```
+
+_entrenadorRouter_
+```java
+const express = require('express');
+const router = express.Router();
+const entrenadorController = require('../controllers/entrenadorController');
+
+
+router.get('/', entrenadorController.entrenadores);
+
+router.get('/add', entrenadorController.entrenadorAddFormulario);
+
+router.post('/add', entrenadorController.entrenadorAdd);
+
+router.get('/delete/:id', entrenadorController.entrenadorDelFormulario);
+
+router.post('/delete/:id', entrenadorController.entrenadorDel);
+
+router.get('/edit/:id', entrenadorController.entrenadorEditFormulario);
+
+router.post('/edit/:id', entrenadorController.entrenadorEdit);
+
+router.get('/:id/sesion', entrenadorController.verSesionesEntrenador);
+
+module.exports = router;
+```
+
+_planMembresiaRouter_
+```java
+const express = require('express');
+const router = express.Router();
+const planMembresiaController = require('../controllers/planMembresiaController'); // Asegúrate de importar correctamente el controlador
+
+// Ruta para listar planes de membresía
+router.get('/', planMembresiaController.listarPlanes);
+
+// Ruta para asignar un plan
+router.post('/asignar/:id_Plan', planMembresiaController.asignarPlan);
+
+module.exports = router;
+```
+
+A continuación, se crea la carpeta controller con los métodos necesarios para su funcionamiento.
+- _adminController_
+- _authController_
+- _clienteController_
+- _clientePlanController_
+- _entrenadorController_
+- _planMembresiaController_
+
+### APP Y DB
+
+También hemos creado el archivo `app.js` en el proyecto base, para que al ejecutar el programa funcione.
+```javascript
+const express = require('express');
+const path = require('path');
+const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+
+
+// Configuración del archivo .env
+dotenv.config({ path: './stack_gym/.env' });
+
+// Importamos las rutas
+const authRouter = require('./routes/authRouter');
+const entrenadorRouter = require('./routes/entrenadorRouter');
+const clienteRouter = require('./routes/clienteRouter');
+const adminRouter = require('./routes/adminRouter');
+const planMembresiaRouter = require('./routes/planMembresiaRouter');
+const clientePlanRouter = require('./routes/clientePlanRouter');
+
+// Inicializar la aplicación Express
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Configuración de middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Configuración de sesiones
+app.use(
+    session({
+        secret: 'misupersecretoquenadiesabe',
+        resave: true,
+        saveUninitialized: false,
+    })
+);
+
+// Agregar el usuario autenticado como variable local en las vistas
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
+});
+
+// Configuración de vistas
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+// Rutas
+app.use('/auth', authRouter);
+app.use('/Entrenador', entrenadorRouter);
+app.use('/Cliente', clienteRouter);
+app.use('/admin', adminRouter);
+app.use('/Plan_Membresia', planMembresiaRouter);
+app.use('/ClientePlan', clientePlanRouter);
+
+
+// Ruta principal
+app.get('/', (req, res) => {
+    if (req.session.user) {
+        res.render('index', { user: req.session.user, titulo: 'Inicio' });
+    } else {
+        res.redirect('/auth/login');
+    }
+});
+
+// Manejo de errores de rutas no encontradas
+app.use((req, res, next) => {
+    res.status(404).send('Página no encontrada');
+});
+
+// Iniciar servidor
+app.listen(port, () => {
+    console.log(`Servidor iniciado en http://localhost:${port}`);
+});
+```
+
+Y otro fichero llamado `db.js` para conectarse a la base de datos.
+```javascript
+const mysql = require('mysql2'); 
+const bcrypt = require('bcrypt');
+
+require('dotenv').config({ path: 'stack_gym/.env' }); 
+
+/**
+ * Conectamos a la base de datos
+ */
+const db = mysql.createConnection({
+    host:       process.env.MYSQL_HOST,
+    port:       process.env.MYSQL_PORT,
+    user:       process.env.MYSQL_USERNAME,
+    password:   process.env.MYSQL_ROOT_PASSWORD,
+    database:   process.env.MYSQL_DATABASE,
+  });
+
+db.connect(err => {
+    if (err) {
+      console.error(
+        'Error al conectar a MySQL:', err);
+      return;
+    }
+    console.log('Conexión exitosa a MySQL');
+  });
+
+module.exports=db;
+```
+
+### PARA EJECUTAR EL PROGRAMA, ¿QUÉ HAY QUE HACER?
+
+Tenemos que estar en la carpeta donde está el docker:
+`cd stack_gym`
+
+Para que funcione tenemos que tener abierto la aplicación del Docker.
+Una vez que estemos en esa carpeta ejecutamos el comando `docker-compose up -d`, y se nos crea los contenedores.
+
+Hacemos un `cd..` para salirnos de la carpeta y ejecutamos `node app.js` para arrancar la aplicación, nos saldrá  la url del localhost con el puerto, es decir, `http://localhost:3000`.

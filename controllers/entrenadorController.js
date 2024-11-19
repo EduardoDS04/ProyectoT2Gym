@@ -6,7 +6,7 @@ exports.entrenadores = (req, res) => {
     db.query(
       'SELECT * FROM `Entrenador`',  
       (err, response) => {
-        if (err) res.send('ERROR al hacer la consulta') 
+        if (err) res.send('Error al hacer la consulta') 
         else res.render('Entrenador/lista', { entrenadores: response, user: req.session.user })  
       }
     )
@@ -46,7 +46,7 @@ exports.entrenadorAdd = (req, res) => {
 exports.entrenadorDelFormulario = (req, res) => {
   const { id } = req.params; 
   if (isNaN(id)) {
-    res.send('PARAMETROS INCORRECTOS');
+    res.send('Parámetros incorrectos');
   } else {
     if (req.session.user) {
       db.query(
@@ -54,7 +54,7 @@ exports.entrenadorDelFormulario = (req, res) => {
         [id],  
         (error, respuesta) => {
           if (error) {
-            res.send('ERROR al INTENTAR BORRAR EL ENTRENADOR');
+            res.send('Error al intentar borrar el entrenador');
           } else {
             if (respuesta.length > 0) {
               
@@ -63,7 +63,7 @@ exports.entrenadorDelFormulario = (req, res) => {
                 user: req.session.user 
               });
             } else {
-              res.send('ERROR al INTENTAR BORRAR EL ENTRENADOR, NO EXISTE');
+              res.send('Error al intentar borrar el entrenador, no existe');
             }
           }
         });
@@ -79,7 +79,7 @@ exports.entrenadorDel = (req, res) => {
 
  
   if (isNaN(id)) {
-    return res.send('ERROR BORRANDO EL ENTRENADOR: ID no válido');
+    return res.send('Error borrando el entrenador:, el id no existe');
   } else {
     
     db.query(
@@ -88,7 +88,7 @@ exports.entrenadorDel = (req, res) => {
       (errorSesion, respuestaSesion) => {
         if (errorSesion) {
           console.error('Error al eliminar las sesiones del entrenador:', errorSesion);
-          return res.send('ERROR BORRANDO SESIONES: ' + errorSesion.message);
+          return res.send('Error borrando sesiones: ' + errorSesion.message);
         }
 
      
@@ -98,7 +98,7 @@ exports.entrenadorDel = (req, res) => {
           (error, respuesta) => {
             if (error) {
               console.error('Error al intentar borrar el entrenador:', error);
-              return res.send('ERROR BORRANDO EL ENTRENADOR: ' + error.message);
+              return res.send('Error borrando el entrenador: ' + error.message);
             } else {
               return res.redirect('/Entrenador'); 
             }
@@ -115,7 +115,7 @@ exports.entrenadorDel = (req, res) => {
 exports.entrenadorEditFormulario = (req, res) => {
   const { id } = req.params;  
   if (isNaN(id)) {
-    res.send('PARÁMETROS INCORRECTOS');
+    res.send('Parámetros incorrectos');
   } else {
     if (req.session.user) {
       db.query(
@@ -123,7 +123,7 @@ exports.entrenadorEditFormulario = (req, res) => {
         [id],  
         (error, respuesta) => {
           if (error) {
-            res.send('ERROR al INTENTAR ACTUALIZAR EL ENTRENADOR');
+            res.send('Error al intentar actualizar el entrenador');
           } else {
             if (respuesta.length > 0) {
               res.render('Entrenador/edit', { 
@@ -131,7 +131,7 @@ exports.entrenadorEditFormulario = (req, res) => {
                 user: req.session.user 
               });
             } else {
-              res.send('ERROR al INTENTAR ACTUALIZAR EL ENTRENADOR, NO EXISTE');
+              res.send('Error al intentar actualizar el entrenador, no existe');
             }
           }
         });
@@ -147,14 +147,14 @@ exports.entrenadorEdit = (req, res) => {
   const paramId = req.params['id'];  
 
   if (isNaN(id) || isNaN(paramId) || id !== paramId) {
-    res.send('ERROR ACTUALIZANDO EL ENTRENADOR');
+    res.send('Error actualizando el entrenador');
   } else {
     db.query(
       'UPDATE Entrenador SET Nombre = ?, Especialidad = ?, Nivel_Experiencia = ? WHERE id = ?',  
       [nombre, especialidad, nivel_experiencia, id],  
       (error, respuesta) => {
         if (error) {
-          res.send('ERROR ACTUALIZANDO ENTRENADOR: ' + error); 
+          res.send('Error al actualizar entrenador: ' + error); 
           console.log(error);
         } else {
           res.redirect('/Entrenador');  
@@ -166,8 +166,6 @@ exports.entrenadorEdit = (req, res) => {
 
 
 
-
-//Maestro-detalle Sesion    Entrenaor-sesion
 // Listar entrenadores y sesiones asociadas (maestro-detalle)
 exports.verSesionesEntrenador = (req, res) => {
   const idEntrenador = req.params.id;

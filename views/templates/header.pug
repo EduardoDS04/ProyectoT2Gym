@@ -17,6 +17,10 @@ nav.navbar.navbar-expand-lg.bg-light
             li.nav-item
               a.nav-link(href='/admin') Panel de Administracion
 
+          if user.tipo === 'ENTRENADOR'
+           li.nav-item
+              a.nav-link(href='/Entrenador') Entrenadores
+
           if user.tipo === 'CLIENTE'
             li.nav-item
               a.nav-link(href='/Plan_Membresia') Planes de Membresía
