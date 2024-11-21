@@ -295,7 +295,7 @@ En la misma carpeta **views**:
 - _register.pug_
 
 
-### CRUD Cliente
+### CRUD CLIENTE
 
 | Verbo | Ruta | Acción |
 |:-------:|:-------:|:------:|
@@ -617,3 +617,23 @@ Para que funcione tenemos que tener abierto la aplicación del Docker.
 Una vez que estemos en esa carpeta ejecutamos el comando `docker-compose up -d`, y se nos crea los contenedores.
 
 Hacemos un `cd..` para salirnos de la carpeta y ejecutamos `node app.js` para arrancar la aplicación, nos saldrá  la url del localhost con el puerto, es decir, `http://localhost:3000`.
+
+
+### IMAGENES DE LA APLICACIÓN
+Al ejecutar la aplicación, nos mostrará este logueo.
+![alt text](image.png)
+
+En caso de no tener ususario, nos registraremos:
+![alt text](image-1.png)
+
+CRUD de Cliente:
+![alt text](image-2.png)
+
+CRUD de Entrenador:
+![alt text](image-3.png)
+
+Plan Membresia:
+![alt text](image-4.png)
+
+Sesiones:
+![alt text](image-5.png)
