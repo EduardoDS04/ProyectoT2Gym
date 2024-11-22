@@ -76,7 +76,6 @@ exports.entrenadorDelFormulario = (req, res) => {
 // Borra un entrenador en la base de datos
 exports.entrenadorDel = (req, res) => {
   const { id } = req.params;
-
  
   if (isNaN(id)) {
     return res.send('Error borrando el entrenador:, el id no existe');

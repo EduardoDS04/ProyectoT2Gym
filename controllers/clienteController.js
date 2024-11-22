@@ -1,5 +1,6 @@
 const db = require('../db')
 
+//Listado de clientes
 exports.clientes = (req, res) => {
   db.query('SELECT * FROM `Cliente`', (err, response) => {
     if (err) {
@@ -22,15 +23,14 @@ exports.clienteAddFormulario = (req, res) => {
 };
 
 
+ // Insertar en la base de datos un nuevo cliente
 exports.clienteAdd = (req, res) => {
   const { nombre, correo, fecha_registro, telefono } = req.body;
 
-  // Validación de los datos
   if (!nombre || !correo || !fecha_registro || !telefono) {
     return res.send('Todos los campos son requeridos');
   }
 
-  // Insertar en la base de datos
   db.query(
     'INSERT INTO Cliente (Nombre, Correo, Fecha_Registro, Telefono) VALUES (?, ?, ?, ?)',
     [nombre, correo, fecha_registro, telefono],
@@ -46,7 +46,7 @@ exports.clienteAdd = (req, res) => {
 
 
 
-
+// Eliminar el cliente
 exports.clienteDelFormulario = (req, res) => {
   const { id } = req.params;  
   if (isNaN(id)) {
@@ -72,6 +72,7 @@ exports.clienteDelFormulario = (req, res) => {
   }
 };
 
+
 exports.clienteDel = (req, res) => {
   const { id } = req.params;
 
@@ -87,7 +88,7 @@ exports.clienteDel = (req, res) => {
           if (error) {
               return res.send('ERROR BORRANDO PLANES RELACIONADOS: ' + error);
           }
-          // Ahora eliminar el cliente
+          // Luego se elimina el cliente
           db.query(
               'DELETE FROM Cliente WHERE id=?',
               [id],
@@ -104,52 +105,47 @@ exports.clienteDel = (req, res) => {
 
 
 
-
 // Mostrar formulario para editar un cliente
 exports.clienteEditFormulario = (req, res) => {
-  const { id } = req.params;  // Obtener el ID del cliente desde los parámetros de la URL
+  const { id } = req.params;  
 
-  // Verificar si el ID es un número válido
   if (isNaN(id)) {
-    return res.send('Parámetros incorrectos: ID no es un número');  // Retornar error si el ID no es un número
+    return res.send('Parámetros incorrectos: ID no es un número');  
   }
 
   // Verificar si el usuario está logueado
   if (req.session.user) {
-    // Realizar la consulta para obtener los datos del cliente
     db.query(
       'SELECT * FROM Cliente WHERE id = ?', 
       [id], 
       (error, respuesta) => {
         if (error) {
-          return res.send('Error al intentar obtener el cliente: ' + error);  // Manejo de errores en la consulta
+          return res.send('Error al intentar obtener el cliente: ' + error);  
         }
         if (respuesta.length > 0) {
           res.render('Cliente/edit', { cliente: respuesta[0], user: req.session.user });
         } else {
-          res.send(`Error: No se ha encontrado el cliente con ID ${id}`);  // Si no se encuentra el cliente con ese ID
+          res.send(`Error: No se ha encontrado el cliente con ID ${id}`);  
         }
       }
     );
   } else {
-    res.redirect('/auth/login');  // Si no está logueado, redirigir al login
+    res.redirect('/auth/login'); 
   }
 };
 
 
 
 
-
+// Se actualiza el cliente
 exports.clienteEdit = (req, res) => {
-  const { id } = req.params;  // Obtener el ID desde los parámetros de la URL
-  const { nombre, correo, telefono } = req.body;  // Obtener los valores del formulario
+  const { id } = req.params;  // 
+  const { nombre, correo, telefono } = req.body;  
 
-  // Asegurarse de que todos los campos estén presentes
+  // Asegurarse de que todos los campos están rellenos
   if (!nombre || !correo || !telefono) {
       return res.send('Todos los campos son obligatorios');
   }
-
-  // Actualización del cliente
   db.query(
       'UPDATE Cliente SET Nombre = ?, Correo = ?, Telefono = ? WHERE id = ?',
       [nombre, correo, telefono, id], 
@@ -157,7 +153,7 @@ exports.clienteEdit = (req, res) => {
           if (error) {
               return res.send('Error actualizando cliente: ' + error);
           } else {
-              res.redirect('/Cliente');  // Redirigir a la lista de clientes después de la actualización
+              res.redirect('/Cliente');  
           }
       }
   );
@@ -166,7 +162,7 @@ exports.clienteEdit = (req, res) => {
 // Manejar registro de cliente
 exports.registrarCliente = (req, res) => {
   const { Nombre, Correo, Telefono } = req.body;
-  const fechaRegistro = new Date(); // Fecha actual
+  const fechaRegistro = new Date(); 
 
   if (!Nombre || !Correo || !Telefono) {
       return res.render('mensaje', {

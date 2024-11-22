@@ -11,20 +11,20 @@ exports.listarPlanes = (req, res) => {
     });
 };
 
+
 // Asignar un plan a un cliente
 exports.asignarPlan = (req, res) => {
     const { id_Plan } = req.params;
     const id_Cliente = req.session.user.id_Cliente;
     const fechaInicio = new Date();
 
-    // Iniciar una transacción para eliminar el plan anterior y asignar el nuevo plan
     db.beginTransaction((err) => {
         if (err) {
             console.error('Error iniciando transacción:', err);
             return res.status(500).send('Error al asignar el plan.');
         }
 
-        // Eliminar planes anteriores
+        // Eliminar planes anteriores del cliente
         db.query(
             'DELETE FROM ClientePlan WHERE id_Cliente = ?',
             [id_Cliente],

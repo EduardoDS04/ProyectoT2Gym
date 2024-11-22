@@ -21,15 +21,15 @@ exports.panel = (req, res) => {
                         });
                     }
 
-                    const datosPanel = resultados[0]; // Resultado de las consultas de totales
+                    const datosPanel = resultados[0]; 
                     res.render('admin/panel', { user: req.session.user, datosPanel });
                 }
             );
         } else {
-            res.redirect('/auth/login'); // Redirigir si no está autenticado como ADMIN
+            res.redirect('/auth/login'); 
         }
     } catch (error) {
         console.error('Error al cargar el panel de administración:', error);
-        res.redirect('/auth/login'); // En caso de error, redirigir al login
+        res.redirect('/auth/login'); 
     }
 };

@@ -3,9 +3,8 @@ const bcrypt = require('bcrypt');
 
 require('dotenv').config({ path: 'stack_gym/.env' }); 
 
-/**
- * Conectamos a la base de datos
- */
+//Conectamos a la base de datos
+
 const db = mysql.createConnection({
     host:       process.env.MYSQL_HOST,
     port:       process.env.MYSQL_PORT,
