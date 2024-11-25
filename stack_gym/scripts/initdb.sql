@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS Sesion;
 DROP TABLE IF EXISTS Plan_Membresia;
 DROP TABLE IF EXISTS Cliente;
 DROP TABLE IF EXISTS Entrenador;
-
+DROP TABLE IF EXISTS users;
 
 
 -- Tabla para los clientes
@@ -57,6 +57,7 @@ CREATE TABLE ClientePlan (
     FOREIGN KEY (id_Plan) REFERENCES Plan_Membresia(id)
 );
 
+-- Tabla de usuarios para el login 
 CREATE TABLE IF NOT EXISTS users(
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
@@ -170,7 +171,7 @@ FOREIGN KEY (id_Cliente) REFERENCES Cliente(id)
 ON DELETE CASCADE;
 
 
-
+ALTER TABLE Sesion DROP FOREIGN KEY Sesion_ibfk_2;
 ALTER TABLE Sesion 
 ADD CONSTRAINT Sesion_ibfk_2
 FOREIGN KEY (id_Entrenador) REFERENCES Entrenador(id)
