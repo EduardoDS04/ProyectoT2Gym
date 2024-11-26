@@ -1,9 +1,17 @@
 extends ../templates/layout
 
 block content
-    
-        h3 Listado de entrenadores
-        div.container
+    h3 Listado de entrenadores
+    div.container
+       
+        form(method="get", action="/Entrenador")
+            div.form-group
+                label(for="Especialidad") Filtrar por especialidad:
+                select#especialidad(name="Especialidad" class="form-control" onchange="this.form.submit()")
+                    option(value="") Todas las especialidades
+                    each esp in especialidades
+                        option(value=esp.selected ? esp.value : undefined selected=esp.selected ? "selected" : undefined)= esp.value
+
         table.table.table-bordered.table-hover
             thead
                 tr
@@ -24,8 +32,7 @@ block content
                             a.btn.btn-warning(href=`/Entrenador/edit/${entrenador.id}`) Editar
                         td
                             a.btn.btn-danger(href=`/Entrenador/delete/${entrenador.id}`) Borrar
-                        td    
+                        td
                             a.btn.btn-primary(href=`/Entrenador/${entrenador.id}/sesion`) Ver Sesiones
         p
             a.btn.btn-success(href="/Entrenador/add") Añadir un nuevo entrenador
-       

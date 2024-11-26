@@ -1,17 +1,45 @@
 const db = require('../db')
 
-// Obtener la lista de todos los entrenadores
+// Obtener la lista de todos los entrenadores, con filtrado por especialidad
 exports.entrenadores = (req, res) => {
-  if (req.session.user)  
+  if (!req.session.user) {
+    return res.redirect('/auth/login');
+  }
+
+  const especialidad = req.query.Especialidad || '';
+
+  //Obtener especialidades distintas
+  const obtenerEspecialidades = 'SELECT DISTINCT Especialidad FROM Entrenador';
+
+  const consultaEntrenadores = especialidad
+    ? 'SELECT * FROM Entrenador WHERE Especialidad = ?'
+    : 'SELECT * FROM Entrenador';
+
+  db.query(obtenerEspecialidades, (err, especialidades) => {
+    if (err) {
+      return res.send('Error al obtener las especialidades');
+    }
+
     db.query(
-      'SELECT * FROM `Entrenador`',  
-      (err, response) => {
-        if (err) res.send('Error al hacer la consulta') 
-        else res.render('Entrenador/lista', { entrenadores: response, user: req.session.user })  
+      consultaEntrenadores,
+      especialidad ? [especialidad] : [],
+      (err, entrenadores) => {
+        if (err) {
+          return res.send('Error al obtener la lista de entrenadores');
+        }
+
+        // Renderizar la vista con entrenadores y especialidades
+        res.render('Entrenador/lista', {
+          entrenadores,
+          user: req.session.user,
+          especialidades: especialidades.map(e => ({
+            value: e.Especialidad,
+            selected: e.Especialidad === especialidad, 
+          })),
+        });
       }
-    )
-  else 
-    res.redirect('/auth/login')
+    );
+  });
 };
 
 // Mostrar formulario para agregar un nuevo entrenador
