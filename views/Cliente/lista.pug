@@ -1,31 +1,45 @@
 extends ../templates/layout
 
 block content
-  h3 Listado de Clientes
-  div.container
-    div.text-right.mt-3
-      a.btn.btn-primary(href="/Cliente/add") Añadir un nuevo cliente
-    table.table.table-bordered.table-hover
-      thead
-        tr
-          th ID
-          th Nombre
-          th Correo
-          th Fecha Registro
-          th Teléfono
-          th Acciones
-      tbody
-        if clientes && clientes.length > 0
-          each cliente in clientes
-            tr
-              td= cliente.id
-              td= cliente.Nombre
-              td= cliente.Correo
-              td= cliente.Fecha_Registro.toLocaleDateString()
-              td= cliente.Telefono
-              td
-                a.btn.btn-warning(href=`/Cliente/edit/${cliente.id}`) Editar
-                a.btn.btn-danger(href=`/Cliente/delete/${cliente.id}`) Borrar
-        else
-          tr
-            td(colspan="6") No se encontraron clientes.
+    h3 Listado de Clientes
+    div.container
+        // Formulario para filtrar por plan de membresía
+        form(method="get", action="/Cliente")
+            div.form-group
+                label(for="Plan") Filtrar por plan de membresía:
+                select#plan(name="Plan" class="form-control" onchange="this.form.submit()")
+                    option(value="") Todos los planes
+                    each plan in planes
+                        option(value=plan.value selected=plan.selected ? "selected" : undefined)= plan.value
+
+        // Botón para añadir un nuevo cliente
+        div.text-right.mt-3
+            a.btn.btn-primary(href="/Cliente/add") Añadir un nuevo cliente
+
+        // Tabla de clientes
+        table.table.table-bordered.table-hover
+            thead
+                tr
+                    th ID
+                    th Nombre
+                    th Correo
+                    th Fecha Registro
+                    th Teléfono
+                    th Plan de Membresía
+                    th Acciones
+            tbody
+                if clientes && clientes.length > 0
+                    each cliente in clientes
+                        tr
+                            td= cliente.id
+                            td= cliente.Nombre
+                            td= cliente.Correo
+                            td= cliente.Fecha_Registro.toLocaleDateString()
+                            td= cliente.Telefono
+                            td= cliente.Nombre_Plan || 'Sin plan'
+                            td
+                                a.btn.btn-warning(href=`/Cliente/edit/${cliente.id}`) Editar
+                                a.btn.btn-danger(href=`/Cliente/delete/${cliente.id}`) Borrar
+                else
+                    tr
+                        td(colspan="7") No se encontraron clientes.

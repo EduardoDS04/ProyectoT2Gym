@@ -250,3 +250,52 @@ exports.eliminarPerfil = (req, res) => {
       });
   });
 };
+
+//Filtrado por tipo de membresia
+//Maestro detalle
+exports.clientes = (req, res) => {
+  const planFiltro = req.query.Plan || ''; // Obtener el filtro desde la querystring
+  const sqlPlanes = 'SELECT DISTINCT Nombre_Plan FROM Plan_Membresia'; // Obtener los planes disponibles
+  const sqlClientes =
+      planFiltro
+          ? `SELECT c.*, pm.Nombre_Plan
+             FROM Cliente c
+             LEFT JOIN ClientePlan cp ON c.id = cp.id_Cliente
+             LEFT JOIN Plan_Membresia pm ON cp.id_Plan = pm.id
+             WHERE pm.Nombre_Plan = ? OR (? = 'Sin plan' AND pm.Nombre_Plan IS NULL)`
+          : `SELECT c.*, pm.Nombre_Plan
+             FROM Cliente c
+             LEFT JOIN ClientePlan cp ON c.id = cp.id_Cliente
+             LEFT JOIN Plan_Membresia pm ON cp.id_Plan = pm.id`;
+
+  db.query(sqlPlanes, (err, planes) => {
+      if (err) {
+          console.error('Error al obtener planes:', err);
+          return res.send('Error al cargar los planes de membresía.');
+      }
+
+      // Agregar "Sin plan" como opción al inicio de la lista
+      const listaPlanes = [{ value: 'Sin plan', selected: planFiltro === 'Sin plan' }, ...planes.map(plan => ({
+          value: plan.Nombre_Plan,
+          selected: plan.Nombre_Plan === planFiltro
+      }))];
+
+      db.query(
+          sqlClientes,
+          planFiltro ? [planFiltro, planFiltro] : [],
+          (err, clientes) => {
+              if (err) {
+                  console.error('Error al listar clientes:', err);
+                  return res.send('Error al listar clientes.');
+              }
+
+              // Renderizar la vista con clientes y planes
+              res.render('Cliente/lista', {
+                  clientes,
+                  planes: listaPlanes,
+                  user: req.session.user
+              });
+          }
+      );
+  });
+};
